@@ -1,0 +1,65 @@
+[
+  {
+    "email": "alex@agencyone.com",
+    "first_name": "Alex",
+    "last_name": "Rivera",
+    "company": "AgencyOne",
+    "persona": "agency_founder"
+  },
+  {
+    "email": "jordan@creativecollective.io",
+    "first_name": "Jordan",
+    "last_name": "Lee",
+    "company": "Creative Collective",
+    "persona": "agency_founder"
+  },
+  {
+    "email": "morgan@studioflow.co",
+    "first_name": "Morgan",
+    "last_name": "Patel",
+    "company": "StudioFlow",
+    "persona": "agency_founder"
+  },
+  {
+    "email": "sam@opsworks.com",
+    "first_name": "Sam",
+    "last_name": "Chen",
+    "company": "OpsWorks",
+    "persona": "ops_pm"
+  },
+  {
+    "email": "taylor@launchpad.io",
+    "first_name": "Taylor",
+    "last_name": "Brooks",
+    "company": "Launchpad Agency",
+    "persona": "ops_pm"
+  },
+  {
+    "email": "casey@projecto.co",
+    "first_name": "Casey",
+    "last_name": "Nguyen",
+    "company": "Projecto",
+    "persona": "ops_pm"
+  },
+  {
+    "email": "riley@brandcraft.com",
+    "first_name": "Riley",
+    "last_name": "Kim",
+    "company": "BrandCraft",
+    "persona": "creative_lead"
+  },
+  {
+    "email": "jamie@ideahouse.io",
+    "first_name": "Jamie",
+    "last_name": "Torres",
+    "company": "IdeaHouse",
+    "persona": "creative_lead"
+  },
+  {
+    "email": "drew@pixelstrategy.co",
+    "first_name": "Drew",
+    "last_name": "Martin",
+    "company": "Pixel Strategy",
+    "persona": "creative_lead"
+  }
+]

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "c001",
+    "company_name": "ScaleUp Agency",
+    "contact_name": "Alex Rivera",
+    "email": "alex@scaleup.io",
+    "category": "established_prospects",
+    "subcategory": "enterprise_agency",
+    "needs": "Scaling content operations without increasing headcount",
+    "preferred_send_time": "09:00"
+  },
+  {
+    "id": "c002",
+    "company_name": "Momentum Marketing",
+    "contact_name": "Jordan Lee",
+    "email": "jordan@momentum.co",
+    "category": "established_prospects",
+    "subcategory": "growth_stage",
+    "needs": "Improving campaign ROI measurement",
+    "preferred_send_time": "10:00"
+  },
+  {
+    "id": "c003",
+    "company_name": "Horizon Digital",
+    "contact_name": "Morgan Patel",
+    "email": "morgan@horizondigital.com",
+    "category": "established_prospects",
+    "subcategory": "enterprise_agency",
+    "needs": "AI integration into existing workflows",
+    "preferred_send_time": "08:30"
+  },
+  {
+    "id": "c004",
+    "company_name": "NovaBrand Studio",
+    "contact_name": "Sam Chen",
+    "email": "sam@novabrand.io",
+    "category": "emerging_clients",
+    "subcategory": "startup_agency",
+    "needs": "Building a repeatable content pipeline from scratch",
+    "preferred_send_time": "11:00"
+  },
+  {
+    "id": "c005",
+    "company_name": "Launchpad Creative",
+    "contact_name": "Taylor Brooks",
+    "email": "taylor@launchpadcreative.co",
+    "category": "emerging_clients",
+    "subcategory": "freelance_collective",
+    "needs": "Automating client reporting and outreach",
+    "preferred_send_time": "09:30"
+  },
+  {
+    "id": "c006",
+    "company_name": "Pixel Forge",
+    "contact_name": "Casey Nguyen",
+    "email": "casey@pixelforge.dev",
+    "category": "emerging_clients",
+    "subcategory": "startup_agency",
+    "needs": "Generating personalized content at scale",
+    "preferred_send_time": "10:30"
+  },
+  {
+    "id": "c007",
+    "company_name": "BrandCraft Co",
+    "contact_name": "Riley Kim",
+    "email": "riley@brandcraft.com",
+    "category": "general_audience",
+    "subcategory": "newsletter_subscriber",
+    "needs": "Staying current on marketing AI trends",
+    "preferred_send_time": "08:00"
+  },
+  {
+    "id": "c008",
+    "company_name": "IdeaHouse",
+    "contact_name": "Jamie Torres",
+    "email": "jamie@ideahouse.io",
+    "category": "general_audience",
+    "subcategory": "conference_lead",
+    "needs": "Exploring AI tools for creative teams",
+    "preferred_send_time": "14:00"
+  },
+  {
+    "id": "c009",
+    "company_name": "Stratosphere Media",
+    "contact_name": "Drew Martin",
+    "email": "drew@stratosphere.media",
+    "category": "general_audience",
+    "subcategory": "newsletter_subscriber",
+    "needs": "Understanding ROI of AI-driven campaigns",
+    "preferred_send_time": "09:00"
+  }
+]
