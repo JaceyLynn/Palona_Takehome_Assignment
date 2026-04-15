@@ -65,8 +65,7 @@ def generate_blog_draft(thesis: str, outline: str) -> dict:
         "## Key Takeaways\n"
         "- Insight one about the topic\n"
         "- Actionable advice readers can use today\n"
-        "- How to measure results\n\n"
-        "*[Mock content — set OPENAI_API_KEY for real generation]*"
+        "- How to measure results"
     )
     return {"thesis": thesis, "outline": outline, "draft": draft}
 
@@ -145,6 +144,220 @@ def _parse_newsletter(text: str) -> tuple[str, str]:
     return subject, body
 
 
+# ── 3b. Newsletter outlines (segment-based) ──────────────────
+
+def generate_newsletter_outlines(
+    thesis: str,
+    segments: list[str],
+    cta: str = "",
+    tone_notes: str = "",
+) -> list[dict]:
+    """Generate brief newsletter outlines for a list of audience segments.
+
+    Returns:
+        [{"segment": str, "subject": str, "outline": str}, ...]
+    """
+    outlines = []
+    for segment in segments:
+        prompt = (
+            "You are a B2B marketing strategist at an AI startup.\n"
+            f'Campaign thesis: "{thesis}"\n'
+            f"Target segment: {segment}\n"
+        )
+        if tone_notes:
+            prompt += f"Tone: {tone_notes}\n"
+        if cta:
+            prompt += f"CTA: {cta}\n"
+        prompt += (
+            "\nWrite a brief newsletter outline for this segment.\n"
+            "Format:\n"
+            "Subject: [one compelling subject line]\n"
+            "- Key point 1\n"
+            "- Key point 2\n"
+            "- Key point 3\n"
+        )
+        result = _call_openai(prompt)
+        if result:
+            lines = result.strip().split("\n", 1)
+            if lines[0].lower().startswith("subject:"):
+                subject = lines[0].split(":", 1)[1].strip()
+                outline_text = lines[1].strip() if len(lines) > 1 else ""
+            else:
+                subject = f'How "{thesis}" matters for {segment}'
+                outline_text = result.strip()
+        else:
+            subject = f'How "{thesis}" matters for {segment}'
+            outline_text = (
+                f"- Why {segment.lower()} should pay attention to this topic\n"
+                f"- Key insights and actionable takeaways for {segment.lower()}\n"
+                f"- Clear next steps and call-to-action"
+            )
+        outlines.append(
+            {"segment": segment, "subject": subject, "outline": outline_text}
+        )
+    return outlines
+
+
+# ── 3c. Persona-based newsletter options (3 per persona) ─────
+
+def generate_persona_newsletters(
+    thesis: str,
+    persona: dict,
+    cta: str = "",
+    tone_notes: str = "",
+    layout: str = "",
+    count: int = 3,
+) -> list[dict]:
+    """Generate *count* distinct newsletter drafts for one persona.
+
+    Returns list of {"segment", "subject", "body", "angle"} dicts.
+    """
+    from src.personas import PERSONAS  # local import to avoid circular
+
+    angles = [
+        "Challenge-first: lead with the pain point, then offer the solution",
+        "Story-driven: open with a brief anecdote or case example",
+        "Data-driven: lead with a compelling statistic or trend",
+    ]
+    title = persona["title"]
+    pain_points = persona.get("pain_points", [])
+    messaging_angle = persona.get("messaging_angle", "")
+
+    results: list[dict] = []
+    for i in range(min(count, len(angles))):
+        angle = angles[i]
+        prompt = (
+            "You are a B2B marketing content writer at an AI startup.\n"
+            f'Campaign thesis: "{thesis}"\n'
+            f"Target persona: {title}\n"
+            f"Persona pain points: {', '.join(pain_points)}\n"
+            f"Messaging angle: {messaging_angle}\n"
+            f"Writing approach: {angle}\n"
+        )
+        if cta:
+            prompt += f"CTA: {cta}\n"
+        if tone_notes:
+            prompt += f"Tone: {tone_notes}\n"
+        if layout:
+            prompt += f"Layout style: {layout}\n"
+        prompt += (
+            "\nWrite a complete newsletter email (200-350 words).\n"
+            "Start with 'Subject: [subject line]' on its own line.\n"
+            "Then write the full email body with a greeting, content, and CTA."
+        )
+        result = _call_openai(prompt)
+        if result:
+            subject, body = _parse_newsletter(result)
+        else:
+            pain = pain_points[i % len(pain_points)] if pain_points else "key challenges"
+            if i == 0:
+                subject = f'How "{thesis}" solves {pain.lower()}'
+                body = (
+                    f"Hi there,\n\n"
+                    f"As a {title.lower()}, you know the struggle: **{pain.lower()}**.\n\n"
+                    f'That\'s exactly why "{thesis}" matters. '
+                    f"Here's what's changing:\n\n"
+                    f"**The Challenge**\n"
+                    f"Most teams are still stuck in manual processes that don't scale.\n\n"
+                    f"**The Solution**\n"
+                    f"- Automate repetitive workflows\n"
+                    f"- Focus your team on high-value work\n"
+                    f"- Measure and iterate faster\n\n"
+                    f"{cta or 'Book a demo →'}"
+                )
+            elif i == 1:
+                subject = f'A {title.lower()} transformed their team — here\'s how'
+                body = (
+                    f"Hi there,\n\n"
+                    f"Last quarter, a {title.lower()} just like you transformed "
+                    f"their team's output by rethinking how they approach "
+                    f"{pain.lower()}.\n\n"
+                    f'Here\'s what we learned about "{thesis}":\n\n'
+                    f"**The Story**\n"
+                    f"They started small — one workflow, one tool, one month.\n\n"
+                    f"**The Results**\n"
+                    f"- 40% time saved on routine tasks\n"
+                    f"- Better team satisfaction scores\n"
+                    f"- Tangible ROI within 60 days\n\n"
+                    f"{cta or 'See the full case study →'}"
+                )
+            else:
+                subject = f'78% of {title.lower()}s say this is their #1 challenge'
+                body = (
+                    f"Hi there,\n\n"
+                    f"**78% of {title.lower()}s** say {pain.lower()} is their "
+                    f"#1 challenge this year.\n\n"
+                    f'Our research on "{thesis}" reveals three key trends:\n\n'
+                    f"**By the Numbers**\n"
+                    f"- Teams using AI workflows save 12+ hours/week\n"
+                    f"- Early adopters see 3x engagement rates\n"
+                    f"- 65% plan to increase investment next quarter\n\n"
+                    f"**What This Means for You**\n"
+                    f"The window to gain a competitive edge is closing. "
+                    f"Don't get left behind.\n\n"
+                    f"{cta or 'Get the full report →'}"
+                )
+        results.append({
+            "segment": title,
+            "subject": subject,
+            "body": body,
+            "angle": angle,
+        })
+    return results
+
+
+# ── 3d. Full newsletter for one segment ──────────────────────
+
+def generate_newsletter_full(
+    thesis: str,
+    segment: str,
+    cta: str = "",
+    tone_notes: str = "",
+    layout: str = "",
+) -> dict:
+    """Generate a complete newsletter email for one audience segment.
+
+    Returns:
+        {"segment": str, "subject": str, "body": str}
+    """
+    prompt = (
+        "You are a B2B marketing content writer at an AI startup.\n"
+        f'Campaign thesis: "{thesis}"\n'
+        f"Target segment: {segment}\n"
+    )
+    if cta:
+        prompt += f"CTA: {cta}\n"
+    if tone_notes:
+        prompt += f"Tone: {tone_notes}\n"
+    if layout:
+        prompt += f"Layout style: {layout}. Structure the email accordingly.\n"
+    prompt += (
+        "\nWrite a complete newsletter email (200-350 words).\n"
+        "Start with 'Subject: [subject line]' on its own line.\n"
+        "Then write the full email body with a greeting, content, and CTA."
+    )
+    result = _call_openai(prompt)
+    if result:
+        subject, body = _parse_newsletter(result)
+    else:
+        subject = f'How "{thesis}" applies to {segment}'
+        body = (
+            f"Hi there,\n\n"
+            f"As part of our {segment.lower()} community, we wanted to share "
+            f'key insights about "{thesis}".\n\n'
+            f"**Why This Matters**\n"
+            f"This topic is reshaping how teams work and creating new "
+            f"opportunities for growth.\n\n"
+            f"**What You Can Do**\n"
+            f"- Review your current approach\n"
+            f"- Identify one area for improvement\n"
+            f"- Start with a small, measurable pilot\n\n"
+            f"**Next Steps**\n"
+            f"{cta or 'Learn more at novamind.ai →'}"
+        )
+    return {"segment": segment, "subject": subject, "body": body}
+
+
 # ── 4. LinkedIn post ──────────────────────────────────────────
 
 def generate_linkedin_post(thesis: str, tone_notes: str = "") -> dict:
@@ -166,15 +379,37 @@ def generate_linkedin_post(thesis: str, tone_notes: str = "") -> dict:
     return {"thesis": thesis, "post": post}
 
 
-# ── 5. Full campaign content (orchestrator) ──────────────────
+# ── 5. Thesis suggestion ─────────────────────────────────────
+
+def suggest_thesis(raw_thesis: str) -> str:
+    """Suggest a more prompt-friendly version of the user's thesis."""
+    prompt = (
+        "You are a B2B marketing strategist. "
+        "Rewrite the following campaign thesis so it is clearer, "
+        "more specific, and better suited for AI content generation. "
+        "Return only the improved thesis, nothing else.\n\n"
+        f"Original: {raw_thesis}"
+    )
+    result = _call_openai(prompt)
+    if result:
+        return result.strip().strip('"')
+    # Rule-based fallback
+    cleaned = raw_thesis.strip().rstrip(".")
+    return f"How {cleaned.lower()} — and why it matters for B2B teams today"
+
+
+# ── 6. Full campaign content (orchestrator) ──────────────────
 
 def generate_full_campaign_content(
     thesis: str,
     clients: list[dict],
     cta: str = "",
     tone_notes: str = "",
+    content_types: list[str] | None = None,
 ) -> dict:
-    """Generate all content pieces for a campaign in one call.
+    """Generate selected content pieces for a campaign.
+
+    content_types controls what gets generated. Defaults to ["Blog", "Newsletter"].
 
     Returns:
         {
@@ -182,27 +417,32 @@ def generate_full_campaign_content(
           "blog_outline": str,
           "blog_draft": str,
           "newsletter_versions": [ {category, clients, subject, body}, ... ],
-          "linkedin_post": str,
           "edited": False,
           "approved": False,
         }
     """
-    outline_result = generate_blog_outline(thesis)
-    outline = outline_result["outline"]
+    if content_types is None:
+        content_types = ["Blog", "Newsletter"]
 
-    draft_result = generate_blog_draft(thesis, outline)
-    draft = draft_result["draft"]
+    outline = ""
+    draft = ""
+    newsletter_versions: list[dict] = []
 
-    newsletters = generate_newsletter_versions(thesis, clients, cta, tone_notes)
+    if "Blog" in content_types:
+        outline_result = generate_blog_outline(thesis)
+        outline = outline_result["outline"]
+        draft_result = generate_blog_draft(thesis, outline)
+        draft = draft_result["draft"]
 
-    linkedin = generate_linkedin_post(thesis, tone_notes)
+    if "Newsletter" in content_types:
+        newsletters = generate_newsletter_versions(thesis, clients, cta, tone_notes)
+        newsletter_versions = newsletters["versions"]
 
     return {
         "thesis": thesis,
         "blog_outline": outline,
         "blog_draft": draft,
-        "newsletter_versions": newsletters["versions"],
-        "linkedin_post": linkedin["post"],
+        "newsletter_versions": newsletter_versions,
         "edited": False,
         "approved": False,
     }

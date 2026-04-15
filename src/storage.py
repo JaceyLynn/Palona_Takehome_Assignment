@@ -95,10 +95,12 @@ def _content_record(campaign_id: str, content: dict) -> dict:
     return {
         "campaign_id": campaign_id,
         "thesis": content.get("thesis", ""),
+        "selected_persona": content.get("selected_persona", ""),
         "blog_title": content.get("thesis", ""),
         "blog_outline": content.get("blog_outline", ""),
         "blog_draft": content.get("blog_draft", ""),
         "newsletter_versions_by_persona": newsletters_by_persona,
+        "selected_newsletter_option": content.get("selected_newsletter_option", {}),
         "linkedin_post": content.get("linkedin_post", ""),
         "created_at": datetime.now(timezone.utc).isoformat(),
         "edited": content.get("edited", False),

@@ -44,9 +44,14 @@ assert fc["thesis"] == "AI helps agencies scale"
 assert len(fc["blog_outline"]) > 0
 assert len(fc["blog_draft"]) > 0
 assert len(fc["newsletter_versions"]) == 3
-assert len(fc["linkedin_post"]) > 0
 assert fc["edited"] is False
 assert fc["approved"] is False
 print("full campaign OK")
+
+# 6 - suggest_thesis
+from src.content_generator import suggest_thesis
+suggestion = suggest_thesis("AI helps agencies")
+assert len(suggestion) > 0
+print("suggest_thesis OK")
 
 print("ALL CONTENT_GENERATOR TESTS PASSED")

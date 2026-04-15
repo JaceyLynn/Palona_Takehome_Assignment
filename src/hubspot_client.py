@@ -42,6 +42,60 @@ def _sim_id() -> str:
     return f"sim_{uuid.uuid4().hex[:8]}"
 
 
+# ── Fetch existing contacts ───────────────────────────────────
+
+def fetch_hubspot_contacts(limit: int = 50) -> dict:
+    """Fetch existing contacts from HubSpot CRM.
+
+    Returns a normalised result with a 'contacts' list.
+    Each contact has: email, firstname, lastname, company.
+    """
+    endpoint = f"{HUBSPOT_BASE_URL}/crm/v3/objects/contacts"
+    params = {
+        "limit": limit,
+        "properties": "email,firstname,lastname,company,client_category",
+    }
+
+    if _is_live():
+        try:
+            resp = requests.get(
+                endpoint, headers=get_headers(), params=params, timeout=_TIMEOUT,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+            contacts = []
+            for r in data.get("results", []):
+                props = r.get("properties", {})
+                contacts.append({
+                    "id": r.get("id", ""),
+                    "email": props.get("email", ""),
+                    "contact_name": f"{props.get('firstname', '')} {props.get('lastname', '')}".strip(),
+                    "company_name": props.get("company", ""),
+                    "category": props.get("client_category", "general_audience"),
+                })
+            return {
+                "success": True,
+                "simulated": False,
+                "contacts": contacts,
+            }
+        except requests.RequestException as exc:
+            return {"success": False, "simulated": False, "contacts": [], "error": str(exc)}
+
+    # Mock contacts
+    return {
+        "success": True,
+        "simulated": True,
+        "contacts": [
+            {"id": "hs_mock_1", "email": "demo@hubspot-mock.com",
+             "contact_name": "Demo User", "company_name": "HubSpot Mock Co",
+             "category": "general_audience"},
+            {"id": "hs_mock_2", "email": "test@hubspot-mock.com",
+             "contact_name": "Test Contact", "company_name": "Mock Agency",
+             "category": "emerging_clients"},
+        ],
+    }
+
+
 # ── Contact property builder ──────────────────────────────────
 #
 # MVP approach: store persona and client_category as custom contact
