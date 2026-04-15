@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "campaign_id": "669ab162",
+    "category": "Demographic",
+    "recipients": 34,
+    "open_rate": 20.2,
+    "click_rate": 7.6,
+    "unsubscribe_rate": 0.68,
+    "demo_clicks": 3,
+    "dwell_time_seconds": 31.0,
+    "linkedin_engagement_rate": 3.5,
+    "recorded_at": "2026-04-15T15:46:19.768050+00:00"
+  }
+]

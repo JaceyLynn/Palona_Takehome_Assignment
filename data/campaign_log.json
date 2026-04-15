@@ -1,1 +1,203 @@
-[]
+[
+  {
+    "campaign_id": "669ab162",
+    "thesis": "Is your business facing challenges in achieving growth?",
+    "send_status": "sent",
+    "send_time": "2026-04-15T15:46:19.500406+00:00",
+    "targeted_categories": [
+      "Demographic"
+    ],
+    "sent_count": 34,
+    "group_results": [
+      {
+        "category": "Demographic",
+        "subject": "Unlock Your Creative Potential Amid Growth Challenges",
+        "sent": 34,
+        "deliveries": [
+          {
+            "email": "priya.allen2@novalabs.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500357+00:00"
+          },
+          {
+            "email": "ella.brown3@anchorcollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500367+00:00"
+          },
+          {
+            "email": "stella.scott11@pixelmedia.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500369+00:00"
+          },
+          {
+            "email": "julian.nelson12@brightlabs.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500371+00:00"
+          },
+          {
+            "email": "julian.baker15@motivegroup.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500372+00:00"
+          },
+          {
+            "email": "jordan.martinez17@orbitgroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500374+00:00"
+          },
+          {
+            "email": "riley.brown19@framelabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500375+00:00"
+          },
+          {
+            "email": "sofia.garcia20@sparkhouse.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500376+00:00"
+          },
+          {
+            "email": "scarlett.nguyen25@orbitstudio.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500377+00:00"
+          },
+          {
+            "email": "grace.roberts26@metricgroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500378+00:00"
+          },
+          {
+            "email": "luna.johnson28@sparkmedia.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500379+00:00"
+          },
+          {
+            "email": "luna.turner30@pixelstudio.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500380+00:00"
+          },
+          {
+            "email": "levi.lee31@orbitworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500381+00:00"
+          },
+          {
+            "email": "mia.walker32@signalagency.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500382+00:00"
+          },
+          {
+            "email": "riley.nelson36@anchorcreative.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500384+00:00"
+          },
+          {
+            "email": "david.anderson40@orbitcollective.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500385+00:00"
+          },
+          {
+            "email": "luna.johnson43@threadlabs.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500386+00:00"
+          },
+          {
+            "email": "alex.scott49@sparkstudio.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500387+00:00"
+          },
+          {
+            "email": "daniel.ross53@openworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500388+00:00"
+          },
+          {
+            "email": "ethan.wright55@signalstudio.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500389+00:00"
+          },
+          {
+            "email": "lucas.clark58@orbitstudio.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500390+00:00"
+          },
+          {
+            "email": "maya.adams59@beaconhouse.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500391+00:00"
+          },
+          {
+            "email": "mia.green61@threadcollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500393+00:00"
+          },
+          {
+            "email": "camila.scott66@summitworks.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500394+00:00"
+          },
+          {
+            "email": "maya.ross68@summitworks.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500395+00:00"
+          },
+          {
+            "email": "mia.roberts70@novaworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500396+00:00"
+          },
+          {
+            "email": "amelia.young74@flowgroup.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500397+00:00"
+          },
+          {
+            "email": "aria.johnson76@openworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500398+00:00"
+          },
+          {
+            "email": "henry.mitchell79@bluecreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500399+00:00"
+          },
+          {
+            "email": "violet.garcia82@pixelhouse.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500400+00:00"
+          },
+          {
+            "email": "wyatt.allen88@bluegroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500401+00:00"
+          },
+          {
+            "email": "aurora.mitchell92@signalmedia.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500402+00:00"
+          },
+          {
+            "email": "sebastian.garcia96@studiocollective.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500403+00:00"
+          },
+          {
+            "email": "ella.anderson99@sparkhouse.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-15T15:46:19.500404+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "669ab162",
+    "blog_title": "Is your business facing challenges in achieving growth?",
+    "send_date": "2026-04-15T15:46:19.500406+00:00",
+    "persona": "Demographic",
+    "newsletter_id": "",
+    "newsletter_subject": "Unlock Your Creative Potential Amid Growth Challenges",
+    "crm_mode": "live",
+    "send_status": "sent",
+    "recipient_count": 34,
+    "hubspot_email_endpoint": "https://api.hubapi.com/marketing/v3/emails"
+  }
+]

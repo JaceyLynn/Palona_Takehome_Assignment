@@ -496,11 +496,18 @@ def _step3():
     st.caption(f"Persona: **{persona['title']}**  |  Campaign: *{thesis}*")
 
     # ── Blog content (generated in Step 1) ──
-    with st.expander("Blog Content", expanded=False):
-        blog_outline = st.session_state.get("blog_outline", "")
-        blog_draft = st.session_state.get("blog_draft", "")
-        st.text_area("Blog Outline", value=blog_outline, height=150, key="blog_edit_outline")
-        st.text_area("Blog Draft", value=blog_draft, height=250, key="blog_edit_draft")
+    st.markdown("#### Blog Content")
+    blog_outline = st.session_state.get("blog_outline", "")
+    blog_draft = st.session_state.get("blog_draft", "")
+    st.text_area("Blog Outline", value=blog_outline, height=150, key="blog_edit_outline")
+    st.text_area("Blog Draft", value=blog_draft, height=250, key="blog_edit_draft")
+    if st.button("Regenerate Blog Draft", key="regen_blog"):
+        edited_outline = st.session_state.get("blog_edit_outline", blog_outline)
+        with st.spinner("Regenerating blog draft from updated outline..."):
+            draft_data = generate_blog_draft(thesis, edited_outline)
+            st.session_state["blog_outline"] = edited_outline
+            st.session_state["blog_draft"] = draft_data["draft"]
+            st.rerun()
 
     st.divider()
 
@@ -668,7 +675,8 @@ def _step3():
             with st.expander("Filters", expanded=False):
                 fc1, fc2 = st.columns(2)
                 with fc1:
-                    search_q = st.text_input("Search name or email", key="cl_search", placeholder="Type to filter...")
+                    persona_titles = ["All"] + [p["title"] for p in PERSONAS]
+                    persona_filter = st.selectbox("Persona", persona_titles, key="cl_persona_filter")
                 with fc2:
                     companies = sorted(clients_df["Company Name"].dropna().unique().tolist()) if "Company Name" in clients_df.columns else []
                     company_filter = st.multiselect("Company Name", companies, key="cl_company_filter")
@@ -682,14 +690,16 @@ def _step3():
 
             # Apply filters
             filtered = clients_df.copy()
-            if search_q:
-                q = search_q.lower()
-                name_mask = (
-                    filtered.get("First Name", pd.Series(dtype=str)).fillna("").str.lower().str.contains(q, na=False)
-                    | filtered.get("Last Name", pd.Series(dtype=str)).fillna("").str.lower().str.contains(q, na=False)
-                    | filtered["Email"].fillna("").str.lower().str.contains(q, na=False)
-                )
-                filtered = filtered[name_mask]
+            if persona_filter and persona_filter != "All":
+                # Map persona title to demographic branch
+                _persona_branch_map = {
+                    "Agency Founder": "Decision Makers",
+                    "Operations / Project Manager": "Operational Users",
+                    "Creative Lead": "Creative Practitioners",
+                }
+                target_branch = _persona_branch_map.get(persona_filter, "")
+                if target_branch and "Demographic Branch" in filtered.columns:
+                    filtered = filtered[filtered["Demographic Branch"] == target_branch]
             if company_filter:
                 filtered = filtered[filtered["Company Name"].isin(company_filter)]
             if job_title_filter and "Job Title" in filtered.columns:
@@ -1544,6 +1554,10 @@ def render_performance_report():
 
     # -- Campaign selector dropdown --
     campaign_names = [c["campaign_name"] for c in all_campaigns]
+    st.caption(
+        "These are mock history campaigns for demo purposes. "
+        "Once you create a campaign of your own, it will appear here."
+    )
     selected_name = st.selectbox(
         "Select a campaign to drill down",
         campaign_names,
@@ -1574,6 +1588,39 @@ def render_performance_report():
         }
 
     prev_benchmark = selected_camp.get("prev_benchmark", seed.get("prev_benchmark", {}))
+
+    # ================================================================
+    # 0.5 AI PERFORMANCE SUMMARY
+    # ================================================================
+    _ps_metrics = selected_camp["metrics"]
+    _ps_total = sum(m.get("recipients", 0) for m in _ps_metrics)
+    _ps_open = round(sum(m["open_rate"] * m["recipients"] for m in _ps_metrics) / max(_ps_total, 1), 1)
+    _ps_click = round(sum(m["click_rate"] * m["recipients"] for m in _ps_metrics) / max(_ps_total, 1), 1)
+    _ps_demo = sum(m.get("demo_clicks", 0) for m in _ps_metrics)
+    _ps_best = max(_ps_metrics, key=lambda m: m["open_rate"])
+    _ps_best_label = _ps_best.get("category", _ps_best.get("branch", "top segment"))
+    # Actionable suggestion based on simple rules
+    if _ps_click < 8:
+        _ps_suggestion = "Consider testing a stronger CTA or moving it higher in the email body to lift click-through."
+    elif _ps_open < 35:
+        _ps_suggestion = "Try A/B testing subject lines — a more curiosity-driven hook could improve open rates."
+    else:
+        _ps_suggestion = f"Double down on the {_ps_best_label} segment with tailored follow-up content to maximize conversions."
+
+    st.markdown(
+        f"<div style='background:#f8f0f5;border-left:4px solid {ACCENT};"
+        f"border-radius:6px;padding:14px 18px;margin-bottom:16px;'>"
+        f"<p style='margin:0 0 6px;font-weight:600;color:{ACCENT};font-size:0.9em;'>"
+        f"Performance Insight</p>"
+        f"<p style='margin:0;color:#333;font-size:0.88em;line-height:1.55;'>"
+        f"This campaign reached <b>{_ps_total} contacts</b> with a "
+        f"<b>{_ps_open}%</b> open rate and <b>{_ps_click}%</b> click-through, "
+        f"generating <b>{_ps_demo}</b> demo clicks. "
+        f"<b>{_ps_best_label}</b> was the highest-performing segment at "
+        f"{_ps_best['open_rate']}% opens. "
+        f"{_ps_suggestion}</p></div>",
+        unsafe_allow_html=True,
+    )
 
     # ================================================================
     # 1. EXECUTIVE SNAPSHOT

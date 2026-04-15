@@ -240,10 +240,13 @@ def generate_persona_newsletters(
             prompt += f"Tone: {tone_notes}\n"
         if layout:
             prompt += f"Layout style: {layout}\n"
+        _cta_inline = cta or 'Book a Demo (https://novamind.ai/demo)'
         prompt += (
             "\nWrite a complete newsletter email (200-350 words).\n"
             "Start with 'Subject: [subject line]' on its own line.\n"
-            "Then write the full email body with a greeting, content, and CTA."
+            "Then write the full email body with a greeting, content, and CTA.\n"
+            "IMPORTANT: Weave the CTA naturally into a closing paragraph — "
+            "do NOT place it as a standalone link or button at the end."
         )
         result = _call_openai(prompt)
         if result:
@@ -263,7 +266,8 @@ def generate_persona_newsletters(
                     f"- Automate repetitive workflows\n"
                     f"- Focus your team on high-value work\n"
                     f"- Measure and iterate faster\n\n"
-                    f"{cta or 'Book a demo →'}"
+                    f"Ready to see the difference for yourself? "
+                    f"[{_cta_inline}] and let us show you how it works."
                 )
             elif i == 1:
                 subject = f'A {title.lower()} transformed their team — here\'s how'
@@ -279,7 +283,8 @@ def generate_persona_newsletters(
                     f"- 40% time saved on routine tasks\n"
                     f"- Better team satisfaction scores\n"
                     f"- Tangible ROI within 60 days\n\n"
-                    f"{cta or 'See the full case study →'}"
+                    f"Curious how they pulled it off? "
+                    f"[{_cta_inline}] for the full story."
                 )
             else:
                 subject = f'78% of {title.lower()}s say this is their #1 challenge'
@@ -293,9 +298,8 @@ def generate_persona_newsletters(
                     f"- Early adopters see 3x engagement rates\n"
                     f"- 65% plan to increase investment next quarter\n\n"
                     f"**What This Means for You**\n"
-                    f"The window to gain a competitive edge is closing. "
-                    f"Don't get left behind.\n\n"
-                    f"{cta or 'Get the full report →'}"
+                    f"The window to gain a competitive edge is closing — "
+                    f"[{_cta_inline}] to see where you stand."
                 )
         results.append({
             "segment": title,
@@ -334,12 +338,15 @@ def generate_newsletter_full(
     prompt += (
         "\nWrite a complete newsletter email (200-350 words).\n"
         "Start with 'Subject: [subject line]' on its own line.\n"
-        "Then write the full email body with a greeting, content, and CTA."
+        "Then write the full email body with a greeting, content, and CTA.\n"
+        "IMPORTANT: Weave the CTA naturally into a closing paragraph — "
+        "do NOT place it as a standalone link or button at the end."
     )
     result = _call_openai(prompt)
     if result:
         subject, body = _parse_newsletter(result)
     else:
+        _cta_inline = cta or 'Learn more at novamind.ai'
         subject = f'How "{thesis}" applies to {segment}'
         body = (
             f"Hi there,\n\n"
@@ -352,8 +359,8 @@ def generate_newsletter_full(
             f"- Review your current approach\n"
             f"- Identify one area for improvement\n"
             f"- Start with a small, measurable pilot\n\n"
-            f"**Next Steps**\n"
-            f"{cta or 'Learn more at novamind.ai →'}"
+            f"If any of this resonates, we'd love to walk you through it — "
+            f"[{_cta_inline}] to get started."
         )
     return {"segment": segment, "subject": subject, "body": body}
 
