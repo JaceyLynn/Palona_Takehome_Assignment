@@ -1,1 +1,707 @@
-[]
+[
+  {
+    "campaign_id": "a8543c28",
+    "thesis": "AI-powered workflows help agencies scale personalized outreach without burnout \u2014 driving higher engagement and faster conversions.",
+    "send_status": "sent",
+    "send_time": "2026-04-16T01:13:28.434430+00:00",
+    "targeted_categories": [
+      "Demographic"
+    ],
+    "sent_count": 25,
+    "group_results": [
+      {
+        "category": "Demographic",
+        "subject": "How \"AI-powered workflows help agencies scale personalized outreach without burnout \u2014 driving higher engagement and faster conversions.\" solves balancing creative vision with client constraints",
+        "sent": 25,
+        "deliveries": [
+          {
+            "email": "emma.wright6@summithouse.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434384+00:00"
+          },
+          {
+            "email": "ava.taylor7@blueworks.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434394+00:00"
+          },
+          {
+            "email": "aiden.hall13@signalstudio.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434399+00:00"
+          },
+          {
+            "email": "theodore.scott14@pixelstudio.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434401+00:00"
+          },
+          {
+            "email": "harper.ross16@novacollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434402+00:00"
+          },
+          {
+            "email": "layla.brown18@anchorcreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434404+00:00"
+          },
+          {
+            "email": "mason.nelson21@brighthouse.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434405+00:00"
+          },
+          {
+            "email": "emma.adams24@canvaslabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434406+00:00"
+          },
+          {
+            "email": "nora.allen27@bluelabs.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434408+00:00"
+          },
+          {
+            "email": "emma.brown38@motivecollective.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434409+00:00"
+          },
+          {
+            "email": "alex.anderson39@flowhouse.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434410+00:00"
+          },
+          {
+            "email": "benjamin.martinez42@opencollective.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434411+00:00"
+          },
+          {
+            "email": "sofia.turner45@threadcollective.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434413+00:00"
+          },
+          {
+            "email": "aiden.allen50@pixelmedia.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434414+00:00"
+          },
+          {
+            "email": "jack.taylor52@sparkgroup.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434415+00:00"
+          },
+          {
+            "email": "noah.carter54@orbitcreative.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434416+00:00"
+          },
+          {
+            "email": "aurora.nguyen64@anchorlabs.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434418+00:00"
+          },
+          {
+            "email": "samuel.martinez72@layermedia.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434419+00:00"
+          },
+          {
+            "email": "ella.lee77@frameworks.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434420+00:00"
+          },
+          {
+            "email": "priya.martinez83@beaconhouse.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434421+00:00"
+          },
+          {
+            "email": "sofia.lee84@framecollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434423+00:00"
+          },
+          {
+            "email": "julian.anderson90@threadagency.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434424+00:00"
+          },
+          {
+            "email": "camila.martinez94@threadagency.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434425+00:00"
+          },
+          {
+            "email": "owen.nelson95@studiogroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434426+00:00"
+          },
+          {
+            "email": "aria.clark98@bluemedia.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:13:28.434427+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "a8543c28",
+    "blog_title": "AI-powered workflows help agencies scale personalized outreach without burnout \u2014 driving higher engagement and faster conversions.",
+    "send_date": "2026-04-16T01:13:28.434430+00:00",
+    "persona": "Demographic",
+    "newsletter_id": "sim_bf8cf906",
+    "newsletter_subject": "How \"AI-powered workflows help agencies scale personalized outreach without burnout \u2014 driving higher engagement and faster conversions.\" solves balancing creative vision with client constraints",
+    "crm_mode": "mock",
+    "send_status": "sent",
+    "recipient_count": 25,
+    "hubspot_email_endpoint": "https://api.hubapi.com/marketing/v3/emails",
+    "hubspot_email_id": "sim_bf8cf906"
+  },
+  {
+    "campaign_id": "fcd0d681",
+    "thesis": "Leverage AI to elevate your startup agency's effectiveness and efficiency.",
+    "send_status": "sent",
+    "send_time": "2026-04-16T01:39:54.605262+00:00",
+    "targeted_categories": [
+      "Lifecycle Stage"
+    ],
+    "sent_count": 41,
+    "group_results": [
+      {
+        "category": "Lifecycle Stage",
+        "subject": "Streamline Your Projects with AI-Powered Solutions",
+        "sent": 41,
+        "deliveries": [
+          {
+            "email": "henry.kim1@opengroup.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605200+00:00"
+          },
+          {
+            "email": "wyatt.carter4@openstudio.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605209+00:00"
+          },
+          {
+            "email": "scarlett.clark5@framepartners.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605211+00:00"
+          },
+          {
+            "email": "noah.adams8@layerlabs.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605213+00:00"
+          },
+          {
+            "email": "lucas.hall9@brightworks.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605214+00:00"
+          },
+          {
+            "email": "penelope.nguyen10@layerlabs.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605216+00:00"
+          },
+          {
+            "email": "mateo.adams22@openstudio.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605217+00:00"
+          },
+          {
+            "email": "jordan.walker23@signalpartners.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605218+00:00"
+          },
+          {
+            "email": "theodore.nelson29@layerworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605220+00:00"
+          },
+          {
+            "email": "isabella.clark33@bluecollective.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605221+00:00"
+          },
+          {
+            "email": "jack.anderson34@openworks.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605222+00:00"
+          },
+          {
+            "email": "ella.garcia35@northstudio.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605224+00:00"
+          },
+          {
+            "email": "mia.nguyen37@flowlabs.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605225+00:00"
+          },
+          {
+            "email": "daniel.perez41@sparkmedia.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605226+00:00"
+          },
+          {
+            "email": "penelope.anderson44@flowlabs.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605227+00:00"
+          },
+          {
+            "email": "layla.turner46@beaconstudio.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605228+00:00"
+          },
+          {
+            "email": "mateo.carter47@sparkcreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605229+00:00"
+          },
+          {
+            "email": "jordan.kim48@summitworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605231+00:00"
+          },
+          {
+            "email": "elijah.nguyen51@northcollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605232+00:00"
+          },
+          {
+            "email": "camila.taylor56@sparkmedia.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605233+00:00"
+          },
+          {
+            "email": "julian.baker57@anchorlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605235+00:00"
+          },
+          {
+            "email": "daniel.king60@framecreative.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605236+00:00"
+          },
+          {
+            "email": "camila.johnson62@anchorlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605237+00:00"
+          },
+          {
+            "email": "charlotte.scott63@layerpartners.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605238+00:00"
+          },
+          {
+            "email": "liam.walker65@northpartners.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605239+00:00"
+          },
+          {
+            "email": "benjamin.brown67@sparkcreative.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605241+00:00"
+          },
+          {
+            "email": "evelyn.martinez69@motiveworks.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605242+00:00"
+          },
+          {
+            "email": "chloe.green71@northworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605243+00:00"
+          },
+          {
+            "email": "henry.garcia73@framehouse.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605244+00:00"
+          },
+          {
+            "email": "charlotte.ross75@bluecreative.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605246+00:00"
+          },
+          {
+            "email": "ella.garcia78@canvaspartners.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605247+00:00"
+          },
+          {
+            "email": "noah.taylor80@bluelabs.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605248+00:00"
+          },
+          {
+            "email": "camila.chen81@motivegroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605249+00:00"
+          },
+          {
+            "email": "ava.lopez85@threadstudio.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605251+00:00"
+          },
+          {
+            "email": "aria.baker86@motivemedia.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605252+00:00"
+          },
+          {
+            "email": "scarlett.nelson87@northworks.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605253+00:00"
+          },
+          {
+            "email": "daniel.lee89@signalgroup.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605254+00:00"
+          },
+          {
+            "email": "jack.perez91@orbitcreative.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605255+00:00"
+          },
+          {
+            "email": "ella.hall93@beaconlabs.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605257+00:00"
+          },
+          {
+            "email": "leo.king97@openagency.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605258+00:00"
+          },
+          {
+            "email": "mateo.nelson100@beaconlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:39:54.605259+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "fcd0d681",
+    "blog_title": "Leverage AI to elevate your startup agency's effectiveness and efficiency.",
+    "send_date": "2026-04-16T01:39:54.605262+00:00",
+    "persona": "Lifecycle Stage",
+    "newsletter_id": "",
+    "newsletter_subject": "Streamline Your Projects with AI-Powered Solutions",
+    "crm_mode": "live",
+    "send_status": "sent",
+    "recipient_count": 41,
+    "hubspot_email_endpoint": "https://api.hubapi.com//marketing/v3/emails"
+  },
+  {
+    "campaign_id": "9a4a94a5",
+    "thesis": "Achieving the most efficient and streamlined workflow in the industry through innovative automation and process optimization.",
+    "send_status": "sent",
+    "send_time": "2026-04-16T01:42:25.853747+00:00",
+    "targeted_categories": [
+      "Behavioral"
+    ],
+    "sent_count": 25,
+    "group_results": [
+      {
+        "category": "Behavioral",
+        "subject": "Unlock Your Creative Potential with Streamlined Workflow Solutions",
+        "sent": 25,
+        "deliveries": [
+          {
+            "email": "emma.wright6@summithouse.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853686+00:00"
+          },
+          {
+            "email": "ava.taylor7@blueworks.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853705+00:00"
+          },
+          {
+            "email": "aiden.hall13@signalstudio.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853711+00:00"
+          },
+          {
+            "email": "theodore.scott14@pixelstudio.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853713+00:00"
+          },
+          {
+            "email": "harper.ross16@novacollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853715+00:00"
+          },
+          {
+            "email": "layla.brown18@anchorcreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853717+00:00"
+          },
+          {
+            "email": "mason.nelson21@brighthouse.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853718+00:00"
+          },
+          {
+            "email": "emma.adams24@canvaslabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853719+00:00"
+          },
+          {
+            "email": "nora.allen27@bluelabs.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853721+00:00"
+          },
+          {
+            "email": "emma.brown38@motivecollective.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853722+00:00"
+          },
+          {
+            "email": "alex.anderson39@flowhouse.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853724+00:00"
+          },
+          {
+            "email": "benjamin.martinez42@opencollective.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853725+00:00"
+          },
+          {
+            "email": "sofia.turner45@threadcollective.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853726+00:00"
+          },
+          {
+            "email": "aiden.allen50@pixelmedia.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853728+00:00"
+          },
+          {
+            "email": "jack.taylor52@sparkgroup.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853729+00:00"
+          },
+          {
+            "email": "noah.carter54@orbitcreative.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853731+00:00"
+          },
+          {
+            "email": "aurora.nguyen64@anchorlabs.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853732+00:00"
+          },
+          {
+            "email": "samuel.martinez72@layermedia.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853734+00:00"
+          },
+          {
+            "email": "ella.lee77@frameworks.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853735+00:00"
+          },
+          {
+            "email": "priya.martinez83@beaconhouse.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853736+00:00"
+          },
+          {
+            "email": "sofia.lee84@framecollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853738+00:00"
+          },
+          {
+            "email": "julian.anderson90@threadagency.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853739+00:00"
+          },
+          {
+            "email": "camila.martinez94@threadagency.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853741+00:00"
+          },
+          {
+            "email": "owen.nelson95@studiogroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853742+00:00"
+          },
+          {
+            "email": "aria.clark98@bluemedia.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:42:25.853743+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "9a4a94a5",
+    "blog_title": "Achieving the most efficient and streamlined workflow in the industry through innovative automation and process optimization.",
+    "send_date": "2026-04-16T01:42:25.853747+00:00",
+    "persona": "Behavioral",
+    "newsletter_id": "",
+    "newsletter_subject": "Unlock Your Creative Potential with Streamlined Workflow Solutions",
+    "crm_mode": "live",
+    "send_status": "sent",
+    "recipient_count": 25,
+    "hubspot_email_endpoint": "https://api.hubapi.com//marketing/v3/emails"
+  },
+  {
+    "campaign_id": "13220c51",
+    "thesis": "Achieving the most efficient and streamlined workflow in the industry through innovative automation and process optimization.",
+    "send_status": "sent",
+    "send_time": "2026-04-16T01:46:04.641764+00:00",
+    "targeted_categories": [
+      "Behavioral"
+    ],
+    "sent_count": 25,
+    "group_results": [
+      {
+        "category": "Behavioral",
+        "subject": "",
+        "sent": 25,
+        "deliveries": [
+          {
+            "email": "emma.wright6@summithouse.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641718+00:00"
+          },
+          {
+            "email": "ava.taylor7@blueworks.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641729+00:00"
+          },
+          {
+            "email": "aiden.hall13@signalstudio.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641731+00:00"
+          },
+          {
+            "email": "theodore.scott14@pixelstudio.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641733+00:00"
+          },
+          {
+            "email": "harper.ross16@novacollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641734+00:00"
+          },
+          {
+            "email": "layla.brown18@anchorcreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641735+00:00"
+          },
+          {
+            "email": "mason.nelson21@brighthouse.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641737+00:00"
+          },
+          {
+            "email": "emma.adams24@canvaslabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641738+00:00"
+          },
+          {
+            "email": "nora.allen27@bluelabs.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641740+00:00"
+          },
+          {
+            "email": "emma.brown38@motivecollective.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641741+00:00"
+          },
+          {
+            "email": "alex.anderson39@flowhouse.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641742+00:00"
+          },
+          {
+            "email": "benjamin.martinez42@opencollective.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641744+00:00"
+          },
+          {
+            "email": "sofia.turner45@threadcollective.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641745+00:00"
+          },
+          {
+            "email": "aiden.allen50@pixelmedia.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641747+00:00"
+          },
+          {
+            "email": "jack.taylor52@sparkgroup.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641748+00:00"
+          },
+          {
+            "email": "noah.carter54@orbitcreative.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641749+00:00"
+          },
+          {
+            "email": "aurora.nguyen64@anchorlabs.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641751+00:00"
+          },
+          {
+            "email": "samuel.martinez72@layermedia.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641752+00:00"
+          },
+          {
+            "email": "ella.lee77@frameworks.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641754+00:00"
+          },
+          {
+            "email": "priya.martinez83@beaconhouse.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641755+00:00"
+          },
+          {
+            "email": "sofia.lee84@framecollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641756+00:00"
+          },
+          {
+            "email": "julian.anderson90@threadagency.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641758+00:00"
+          },
+          {
+            "email": "camila.martinez94@threadagency.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641759+00:00"
+          },
+          {
+            "email": "owen.nelson95@studiogroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641760+00:00"
+          },
+          {
+            "email": "aria.clark98@bluemedia.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T01:46:04.641762+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "13220c51",
+    "blog_title": "Achieving the most efficient and streamlined workflow in the industry through innovative automation and process optimization.",
+    "send_date": "2026-04-16T01:46:04.641764+00:00",
+    "persona": "Behavioral",
+    "newsletter_id": "",
+    "newsletter_subject": "",
+    "crm_mode": "live",
+    "send_status": "sent",
+    "recipient_count": 25,
+    "hubspot_email_endpoint": "https://api.hubapi.com//marketing/v3/emails"
+  }
+]

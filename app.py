@@ -55,12 +55,14 @@ from src.storage import (
     save_generated_content_json,
     load_performance_history,
 )
+from src.zapier_client import launch_zapier_workflow, _is_live as zapier_is_live
 
 load_dotenv()
 
 # ── Mode detection ────────────────────────────────────────────
 LIVE_MODE = bool(os.getenv("OPENAI_API_KEY"))
 HUBSPOT_LIVE = hubspot_is_live()
+ZAPIER_LIVE = zapier_is_live()
 
 # ── Page config & CSS ─────────────────────────────────────────
 st.set_page_config(page_title="NovaMind Content Pipeline", layout="wide")
@@ -250,6 +252,8 @@ with st.sidebar:
 
         if st.button(label, key=f"nav_{key}", use_container_width=True):
             st.session_state.page = key
+            if key == "generate":
+                st.session_state.gen_step = 1
             st.rerun()
 
     st.divider()
@@ -259,10 +263,14 @@ with st.sidebar:
     crm_label = "Live (HubSpot)" if HUBSPOT_LIVE else "Mock"
     st.caption(f"**AI:** {ai_label}")
     st.caption(f"**CRM:** {crm_label}")
+    zapier_label = "Live" if ZAPIER_LIVE else "Mock"
+    st.caption(f"**Zapier:** {zapier_label}")
     if not LIVE_MODE:
         st.caption("Set `OPENAI_API_KEY` in .env for live AI.")
     if not HUBSPOT_LIVE:
         st.caption("Set `HUBSPOT_ACCESS_TOKEN` in .env for HubSpot.")
+    if not ZAPIER_LIVE:
+        st.caption("Set `ZAPIER_WEBHOOK_URL` in .env for Zapier.")
 
 page = st.session_state.page
 
@@ -299,6 +307,14 @@ def render_generate_content():
 
 def _step1():
     st.subheader("Step 1 — Campaign Content")
+
+    # Pre-fill thesis in demo mode for easy testing
+    if not LIVE_MODE:
+        st.session_state.setdefault(
+            "campaign_thesis_input",
+            "AI-powered workflows help agencies scale personalized outreach "
+            "without burnout — driving higher engagement and faster conversions.",
+        )
 
     thesis = st.text_area(
         "Campaign thesis / content brief",
@@ -647,16 +663,34 @@ def _step3():
         help="Configure layout templates on the Info Setting page.",
     )
 
-    # ── Load contacts (all, not branch-filtered) ──
+    # ── Load contacts, pre-filtered by persona ──
+    _PERSONA_DEMO_MAP = {
+        "Agency Founder": "Decision Makers",
+        "Operations / Project Manager": "Operational Users",
+        "Creative Lead / Strategist": "Creative Practitioners",
+        "Creative Lead": "Creative Practitioners",
+        "Growth Marketer": "Decision Makers",
+        "CTO / Technical Lead": "Operational Users",
+        "Customer Experience Lead": "Creative Practitioners",
+        "Revenue Operations Manager": "Operational Users",
+        "Brand Strategist": "Creative Practitioners",
+        "Product Marketing Manager": "Decision Makers",
+    }
     if "step3_clients" not in st.session_state:
         contacts_df = st.session_state.get("contacts_df", pd.DataFrame())
-        if not contacts_df.empty:
-            st.session_state["step3_clients"] = contacts_df.reset_index(drop=True)
-        else:
+        if contacts_df.empty:
             all_clients = load_clients()
-            st.session_state["step3_clients"] = pd.DataFrame(all_clients)
+            contacts_df = pd.DataFrame(all_clients)
+        contacts_df = contacts_df.reset_index(drop=True)
+        # Pre-filter by persona's demographic branch
+        demo_branch = _PERSONA_DEMO_MAP.get(persona["title"], "")
+        if demo_branch and "Demographic Branch" in contacts_df.columns:
+            filtered_df = contacts_df[contacts_df["Demographic Branch"] == demo_branch]
+            st.session_state["step3_clients"] = filtered_df.reset_index(drop=True)
+        else:
+            st.session_state["step3_clients"] = contacts_df
 
-    # ── Selected-email tracking ──
+    # ── Selected-email tracking (pre-select only filtered contacts) ──
     if "selected_emails" not in st.session_state:
         st.session_state["selected_emails"] = set(
             st.session_state["step3_clients"]["Email"].tolist()
@@ -718,7 +752,11 @@ def _step3():
         with st.expander("Filters", expanded=False):
             fc1, fc2 = st.columns(2)
             with fc1:
-                persona_titles = ["All"] + [p["title"] for p in PERSONAS]
+                _all_persona_titles = (
+                    [p["title"] for p in PERSONAS]
+                    + [p["title"] for ps in _ALT_PERSONA_SETS for p in ps]
+                )
+                persona_titles = ["All"] + sorted(set(_all_persona_titles))
                 persona_filter = st.selectbox("Persona", persona_titles, key="cl_persona_filter")
             with fc2:
                 companies = sorted(clients_df["Company Name"].dropna().unique().tolist()) if "Company Name" in clients_df.columns else []
@@ -735,12 +773,7 @@ def _step3():
         filtered = clients_df.copy()
         if persona_filter and persona_filter != "All":
             # Map persona title to demographic branch
-            _persona_branch_map = {
-                "Agency Founder": "Decision Makers",
-                "Operations / Project Manager": "Operational Users",
-                "Creative Lead": "Creative Practitioners",
-            }
-            target_branch = _persona_branch_map.get(persona_filter, "")
+            target_branch = _PERSONA_DEMO_MAP.get(persona_filter, "")
             if target_branch and "Demographic Branch" in filtered.columns:
                 filtered = filtered[filtered["Demographic Branch"] == target_branch]
         if company_filter:
@@ -910,12 +943,26 @@ def _step3():
     heading = st.session_state.get("heading", DEFAULT_HEADING)
     signature = st.session_state.get("signature", DEFAULT_SIGNATURE)
     sig_html = signature.replace("\n", "<br>")
+
+    # Resolve hero image: Marketing Settings header image → Step 1 upload → Step 3 upload
+    _hero_img = (
+        st.session_state.get("header_image")
+        or (all_imgs[0] if all_imgs else None)
+    )
+
     st.markdown(
         f"<div style='border:1px solid #ddd;border-radius:8px;padding:16px;"
-        f"background:#fafafa;max-width:680px;'>"
+        f"background:#fafafa;'>"
         f"<h2 style='margin:0 0 8px;color:{ACCENT};'>{heading}</h2>"
         f"<p style='color:#888;font-size:0.8em;margin:0 0 4px;'>Subject</p>"
-        f"<h3 style='margin:0 0 12px;color:#111;'>{subj}</h3>"
+        f"<h3 style='margin:0 0 12px;color:#111;'>{subj}</h3>",
+        unsafe_allow_html=True,
+    )
+    if _hero_img:
+        st.image(_hero_img, use_container_width=True)
+    st.markdown(
+        f"<div style='border:1px solid #ddd;border-radius:0 0 8px 8px;padding:16px;"
+        f"background:#fafafa;margin-top:-1rem;'>"
         f"<hr style='border-color:#eee;'>"
         f"<div style='white-space:pre-wrap;font-size:0.95em;color:#222;'>"
         f"{body}</div>"
@@ -924,9 +971,6 @@ def _step3():
         f"</div>",
         unsafe_allow_html=True,
     )
-    # Show first image inside the preview
-    if all_imgs:
-        st.image(all_imgs[0], use_container_width=True, caption="Newsletter hero image")
 
     # ================================================================
     # SEND TIME SETTING
@@ -1090,6 +1134,22 @@ def _execute_send(thesis: str, seg_type: str, edited_df: pd.DataFrame):
         }
         # Attach per-contact detail for breakdown analysis
         report["contact_details"] = selected
+
+        # ── Zapier webhook (post-approval orchestration) ──────────
+        zapier_payload = {
+            "campaign_id": campaign_id,
+            "thesis": thesis,
+            "persona": st.session_state.get("selected_persona", ""),
+            "subject": subject,
+            "body": body,
+            "send_time_mode": send_time_mode,
+            "send_time_value": send_time_value,
+            "recipient_count": len(sel_df),
+            "recipients": [c["email"] for c in selected],
+        }
+        zapier_result = launch_zapier_workflow(zapier_payload)
+        st.session_state["zapier_result"] = zapier_result
+
         st.session_state["send_result"] = record
 
     st.success(
@@ -1112,30 +1172,19 @@ def _execute_send(thesis: str, seg_type: str, edited_df: pd.DataFrame):
             st.caption("Send timing: **Per-contact preferred send time**")
     st.info("View detailed results on the **Performance Report** page.")
 
-    # ── Brief performance summary ──
-    with st.expander("Performance Summary", expanded=True):
-        if metrics:
-            cats = list({m.get("category", "") for m in metrics})
-            best = max(metrics, key=lambda m: m.get("open_rate", 0))
-            avg_open = round(sum(m.get("open_rate", 0) for m in metrics) / len(metrics), 1)
-            avg_click = round(sum(m.get("click_rate", 0) for m in metrics) / len(metrics), 1)
-            total_demo = sum(m.get("demo_clicks", 0) for m in metrics)
-            persona_label = st.session_state.get("selected_persona", "").replace("_", " ").title()
-
+    # ── Zapier Webhook Status ──
+    zr = st.session_state.get("zapier_result")
+    if zr:
+        mode_label = "Simulated" if zr["simulated"] else "Live"
+        icon = "✅" if zr["success"] else "❌"
+        with st.expander(f"Zapier Webhook — {mode_label} {icon}", expanded=False):
             st.markdown(
-                f"**Campaign sent to {len(selected)} contacts** across {len(cats)} segment(s).\n\n"
-                f"- **Avg Open Rate:** {avg_open}%\n"
-                f"- **Avg Click-Through:** {avg_click}%\n"
-                f"- **Total Demo Clicks:** {total_demo}\n"
-                f"- **Best Segment:** {best.get('category', 'N/A')} "
-                f"(open rate {best.get('open_rate', 0)}%)\n"
-                f"- **Persona Used:** {persona_label}\n\n"
-                f"**Recommended next step:** Double down on **{best.get('category', 'your top segment')}** — "
-                f"they showed the strongest engagement. Consider A/B testing subject lines "
-                f"for lower-performing segments to lift open rates."
+                f"- **Status:** {zr['status_code']}  \n"
+                f"- **Message:** {zr['message']}  \n"
+                f"- **Request ID:** `{zr['request_id']}`  \n"
+                f"- **Launched at:** {zr['launched_at']}  \n"
+                f"- **Mode:** {mode_label}"
             )
-        else:
-            st.caption("No performance data available yet.")
 
 
 # =====================================================================
@@ -1212,6 +1261,14 @@ def render_info_setting():
             "Newsletter Heading",
             value=st.session_state.get("heading", DEFAULT_HEADING),
             key="v_heading",
+        )
+        st.markdown("---")
+        st.caption("Upload a header image that appears at the top of every newsletter, beneath the subject line.")
+        st.file_uploader(
+            "Header Image",
+            type=["png", "jpg", "jpeg", "gif"],
+            accept_multiple_files=False,
+            key="header_image",
         )
 
     # --- Signature / Footer ---

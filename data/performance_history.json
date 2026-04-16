@@ -1,1 +1,50 @@
-[]
+[
+  {
+    "campaign_id": "a8543c28",
+    "category": "Demographic",
+    "recipients": 25,
+    "open_rate": 36.5,
+    "click_rate": 9.7,
+    "unsubscribe_rate": 2.74,
+    "demo_clicks": 0,
+    "dwell_time_seconds": 50.0,
+    "linkedin_engagement_rate": 1.2,
+    "recorded_at": "2026-04-16T01:13:28.438898+00:00"
+  },
+  {
+    "campaign_id": "fcd0d681",
+    "category": "Lifecycle Stage",
+    "recipients": 41,
+    "open_rate": 27.2,
+    "click_rate": 7.2,
+    "unsubscribe_rate": 2.87,
+    "demo_clicks": 2,
+    "dwell_time_seconds": 16.0,
+    "linkedin_engagement_rate": 2.5,
+    "recorded_at": "2026-04-16T01:39:54.963536+00:00"
+  },
+  {
+    "campaign_id": "9a4a94a5",
+    "category": "Behavioral",
+    "recipients": 25,
+    "open_rate": 24.9,
+    "click_rate": 2.6,
+    "unsubscribe_rate": 2.0,
+    "demo_clicks": 2,
+    "dwell_time_seconds": 35.0,
+    "linkedin_engagement_rate": 2.6,
+    "recorded_at": "2026-04-16T01:42:26.077087+00:00"
+  },
+  {
+    "campaign_id": "13220c51",
+    "category": "Behavioral",
+    "recipients": 25,
+    "open_rate": 25.1,
+    "click_rate": 2.5,
+    "unsubscribe_rate": 1.03,
+    "demo_clicks": 3,
+    "dwell_time_seconds": 47.0,
+    "linkedin_engagement_rate": 1.8,
+    "recorded_at": "2026-04-16T01:46:04.890946+00:00"
+  }
+]
