@@ -33,7 +33,6 @@ from src.content_generator import (
     generate_persona_newsletters,
     suggest_thesis,
 )
-from src.personas import PERSONAS
 from src.send_engine import (
     simulate_send_campaign,
     log_send_result,
@@ -152,6 +151,65 @@ div[data-testid="stSidebar"] > div > div > div > .stButton > button {{
 
 # Branch basis labels (order for the UI selector)
 BRANCH_BASIS_LABELS = list(BRANCH_BASIS_MAP.keys())
+
+# ── Single source of truth: basis → 3 persona/category options ──
+BASIS_TO_PERSONAS: dict[str, list[dict]] = {
+    "Demographic": [
+        {"id": "decision_makers", "title": "Decision Makers",
+         "pain_points": ["Scaling operations without losing quality", "Finding and retaining top talent", "Maintaining profitability"],
+         "messaging_angle": "Focus on strategic growth, leadership leverage, and systems that free leaders from day-to-day execution."},
+        {"id": "operational_users", "title": "Operational Users",
+         "pain_points": ["Keeping projects on time and budget", "Managing cross-functional communication", "Tool sprawl and process inconsistency"],
+         "messaging_angle": "Emphasize efficiency gains, workflow automation, and practical frameworks that reduce chaos."},
+        {"id": "creative_practitioners", "title": "Creative Practitioners",
+         "pain_points": ["Balancing creative vision with client constraints", "Getting buy-in on bold ideas", "Avoiding burnout while staying inspired"],
+         "messaging_angle": "Highlight creative empowerment, storytelling techniques, and tools that protect creative energy."},
+    ],
+    "Behavioral": [
+        {"id": "product_explorers", "title": "Product Explorers",
+         "pain_points": ["Too many tools to evaluate", "Unclear ROI before committing", "Information overload during research"],
+         "messaging_angle": "Provide clear comparisons, guided walkthroughs, and low-friction trial paths."},
+        {"id": "action_takers", "title": "Action-Takers",
+         "pain_points": ["Slow onboarding processes", "Lack of immediate value after sign-up", "Friction in activation steps"],
+         "messaging_angle": "Focus on quick wins, streamlined onboarding, and immediate impact stories."},
+        {"id": "passive_visitors", "title": "Passive Visitors",
+         "pain_points": ["No compelling reason to engage deeper", "Content doesn't feel relevant", "Unclear next steps"],
+         "messaging_angle": "Use curiosity-driven hooks, social proof, and clear calls to action to re-engage."},
+    ],
+    "Engagement": [
+        {"id": "highly_engaged", "title": "Highly Engaged",
+         "pain_points": ["Wants advanced features and deeper integrations", "Needs exclusive or early-access content", "Risk of churn if value plateaus"],
+         "messaging_angle": "Reward loyalty with insider content, advanced tips, and VIP treatment."},
+        {"id": "moderately_engaged", "title": "Moderately Engaged",
+         "pain_points": ["Inconsistent usage patterns", "Hasn't found the sticky feature yet", "Needs a nudge to go deeper"],
+         "messaging_angle": "Highlight underused features, success stories, and personalized recommendations."},
+        {"id": "low_engagement", "title": "Low Engagement",
+         "pain_points": ["Forgot why they signed up", "Doesn't see the value", "Overwhelmed by the product"],
+         "messaging_angle": "Re-engage with simplified messaging, one clear benefit, and an easy re-entry path."},
+    ],
+    "Lifecycle Stage": [
+        {"id": "potential_clients", "title": "Potential Clients",
+         "pain_points": ["Not sure if the product fits their needs", "Comparing multiple vendors", "Needs social proof"],
+         "messaging_angle": "Build trust with case studies, ROI data, and risk-free trials."},
+        {"id": "new_clients", "title": "New Clients",
+         "pain_points": ["Steep learning curve", "Needs onboarding guidance", "Wants quick early wins"],
+         "messaging_angle": "Deliver onboarding support, quickstart guides, and early success milestones."},
+        {"id": "established_clients", "title": "Established Clients",
+         "pain_points": ["Feature fatigue", "Needs to justify continued spend", "Wants to expand usage across teams"],
+         "messaging_angle": "Focus on expansion opportunities, ROI recaps, and strategic partnership value."},
+    ],
+    "Interest": [
+        {"id": "efficiency_focused", "title": "Efficiency-Focused",
+         "pain_points": ["Wasting time on manual tasks", "Siloed tools slowing down workflows", "Difficulty measuring productivity gains"],
+         "messaging_angle": "Emphasize automation, integration, and measurable time savings."},
+        {"id": "growth_focused", "title": "Growth-Focused",
+         "pain_points": ["Scaling outreach without more headcount", "Proving marketing ROI", "Identifying best channels"],
+         "messaging_angle": "Focus on scalable strategies, attribution clarity, and pipeline acceleration."},
+        {"id": "innovation_focused", "title": "Innovation-Focused",
+         "pain_points": ["Staying ahead of competitors", "Adopting new tech without disruption", "Building a culture of experimentation"],
+         "messaging_angle": "Highlight cutting-edge capabilities, early-adopter advantages, and future-proofing."},
+    ],
+}
 
 DEFAULT_LAYOUTS = [
     {"name": "Clean & Minimal", "desc": "Simple layout with clear hierarchy and white space"},
@@ -414,62 +472,25 @@ def _step1():
             st.rerun()
 
 
-# -- Step 2: Option Preview ---------------------------------------------
-
-# Alternative persona sets for "Suggest Different Categories"
-_ALT_PERSONA_SETS = [
-    [
-        {"id": "alt_growth", "title": "Growth Marketer",
-         "pain_points": ["Scaling campaigns across channels", "Proving ROI to leadership", "Keeping up with platform changes"],
-         "messaging_angle": "Focus on measurable growth tactics, attribution, and scalable playbooks."},
-        {"id": "alt_cto", "title": "CTO / Technical Lead",
-         "pain_points": ["Integrating marketing tools with engineering stack", "Data quality and pipeline reliability", "Balancing speed with stability"],
-         "messaging_angle": "Emphasize technical integration, data infrastructure, and developer-friendly solutions."},
-        {"id": "alt_cx", "title": "Customer Experience Lead",
-         "pain_points": ["Unifying touchpoints across the customer journey", "Reducing churn through proactive engagement", "Scaling personalization"],
-         "messaging_angle": "Highlight customer-centric strategies, retention frameworks, and personalization at scale."},
-    ],
-    [
-        {"id": "alt_rev", "title": "Revenue Operations Manager",
-         "pain_points": ["Aligning sales and marketing data", "Forecasting accuracy", "Process standardization across teams"],
-         "messaging_angle": "Focus on cross-functional alignment, data-driven forecasting, and operational efficiency."},
-        {"id": "alt_brand", "title": "Brand Strategist",
-         "pain_points": ["Maintaining brand consistency at scale", "Differentiating in crowded markets", "Balancing brand and performance"],
-         "messaging_angle": "Emphasize brand storytelling, differentiation, and long-term positioning."},
-        {"id": "alt_product", "title": "Product Marketing Manager",
-         "pain_points": ["Translating features into customer value", "Competitive positioning", "Launch execution across teams"],
-         "messaging_angle": "Highlight go-to-market strategy, messaging frameworks, and cross-team launch coordination."},
-    ],
-]
-
+# -- Step 2: Choose Category ---------------------------------------------
 
 def _step2():
     thesis = st.session_state["campaign_thesis"]
+    seg_type = st.session_state["segmentation_type"]
 
-    st.subheader("Step 2 — Choose Persona")
-    st.caption(f"Campaign: *{thesis}*")
+    st.subheader("Step 2 — Choose Category")
+    st.caption(f"Basis: **{seg_type}**  |  Campaign: *{thesis}*")
 
-    # ── Determine which persona set to show ──
-    alt_idx = st.session_state.get("_alt_persona_idx", -1)  # -1 = default PERSONAS
-    if alt_idx < 0:
-        active_personas = PERSONAS
-    else:
-        active_personas = _ALT_PERSONA_SETS[alt_idx % len(_ALT_PERSONA_SETS)]
+    # Look up the 3 categories for the selected basis
+    active_personas = BASIS_TO_PERSONAS.get(seg_type, [])
+    if not active_personas:
+        st.error(f"No categories defined for basis '{seg_type}'.")
+        return
 
     st.session_state.setdefault("selected_persona", None)
     current_sel = st.session_state.get("selected_persona")
 
-    # ── Suggest Different Categories button ──
-    _, _sug_col = st.columns([3, 1])
-    with _sug_col:
-        if st.button("Suggest Different Categories", key="suggest_alt_personas"):
-            new_idx = st.session_state.get("_alt_persona_idx", -1) + 1
-            st.session_state["_alt_persona_idx"] = new_idx
-            st.session_state["selected_persona"] = None  # reset selection
-            st.session_state.pop("persona_newsletter_cache", None)
-            st.rerun()
-
-    # ── Show persona cards ──
+    # ── Show category cards ──
     cols = st.columns(3)
     for i, (col, persona) in enumerate(zip(cols, active_personas)):
         with col:
@@ -499,17 +520,15 @@ def _step2():
             ):
                 if not is_selected:
                     st.session_state["selected_persona"] = persona["id"]
-                    # Store the full persona dict so Step 3 can find it regardless of set
                     st.session_state["_active_persona_obj"] = persona
                     st.rerun()
 
     if current_sel:
-        # Resolve persona from active set or stored object
         sel_persona = st.session_state.get("_active_persona_obj") or next(
             (p for p in active_personas if p["id"] == current_sel), None
         )
         if sel_persona:
-            st.info(f"Selected persona: **{sel_persona['title']}**")
+            st.info(f"Selected category: **{sel_persona['title']}**")
 
     # ── Navigation ──
     st.divider()
@@ -521,7 +540,7 @@ def _step2():
     with c_next:
         if st.button("Next Step →", type="primary", key="step2_next"):
             if not current_sel:
-                st.error("Please select a persona before proceeding.")
+                st.error("Please select a category before proceeding.")
             else:
                 for k in (
                     "newsletter_full",
@@ -566,17 +585,17 @@ def _step3():
     thesis = st.session_state["campaign_thesis"]
     seg_type = st.session_state["segmentation_type"]
     persona_id = st.session_state["selected_persona"]
+    # Resolve persona from the basis-driven mapping
+    basis_personas = BASIS_TO_PERSONAS.get(seg_type, [])
     persona = st.session_state.get("_active_persona_obj") or next(
-        (p for p in PERSONAS if p["id"] == persona_id), None
-    ) or next(
-        (p for ps in _ALT_PERSONA_SETS for p in ps if p["id"] == persona_id), None
+        (p for p in basis_personas if p["id"] == persona_id), None
     )
     if not persona:
-        st.error("Selected persona not found. Please go back and select again.")
+        st.error("Selected category not found. Please go back and select again.")
         return
 
     st.subheader("Step 3 — Detail Edit & Send")
-    st.caption(f"Persona: **{persona['title']}**  |  Campaign: *{thesis}*")
+    st.caption(f"Basis: **{seg_type}**  |  Category: **{persona['title']}**  |  Campaign: *{thesis}*")
 
     # ── Blog content (generated in Step 1) ──
     st.markdown("#### Blog Content")
@@ -663,29 +682,17 @@ def _step3():
         help="Configure layout templates on the Info Setting page.",
     )
 
-    # ── Load contacts, pre-filtered by persona ──
-    _PERSONA_DEMO_MAP = {
-        "Agency Founder": "Decision Makers",
-        "Operations / Project Manager": "Operational Users",
-        "Creative Lead / Strategist": "Creative Practitioners",
-        "Creative Lead": "Creative Practitioners",
-        "Growth Marketer": "Decision Makers",
-        "CTO / Technical Lead": "Operational Users",
-        "Customer Experience Lead": "Creative Practitioners",
-        "Revenue Operations Manager": "Operational Users",
-        "Brand Strategist": "Creative Practitioners",
-        "Product Marketing Manager": "Decision Makers",
-    }
+    # ── Load contacts, pre-filtered by basis + selected category ──
     if "step3_clients" not in st.session_state:
         contacts_df = st.session_state.get("contacts_df", pd.DataFrame())
         if contacts_df.empty:
             all_clients = load_clients()
             contacts_df = pd.DataFrame(all_clients)
         contacts_df = contacts_df.reset_index(drop=True)
-        # Pre-filter by persona's demographic branch
-        demo_branch = _PERSONA_DEMO_MAP.get(persona["title"], "")
-        if demo_branch and "Demographic Branch" in contacts_df.columns:
-            filtered_df = contacts_df[contacts_df["Demographic Branch"] == demo_branch]
+        branch_col = get_branch_column(seg_type)
+        category_title = persona["title"]
+        if branch_col in contacts_df.columns:
+            filtered_df = contacts_df[contacts_df[branch_col] == category_title]
             st.session_state["step3_clients"] = filtered_df.reset_index(drop=True)
         else:
             st.session_state["step3_clients"] = contacts_df
@@ -752,12 +759,8 @@ def _step3():
         with st.expander("Filters", expanded=False):
             fc1, fc2 = st.columns(2)
             with fc1:
-                _all_persona_titles = (
-                    [p["title"] for p in PERSONAS]
-                    + [p["title"] for ps in _ALT_PERSONA_SETS for p in ps]
-                )
-                persona_titles = ["All"] + sorted(set(_all_persona_titles))
-                persona_filter = st.selectbox("Persona", persona_titles, key="cl_persona_filter")
+                _basis_cats = ["All"] + [p["title"] for p in BASIS_TO_PERSONAS.get(seg_type, [])]
+                category_filter = st.selectbox("Category", _basis_cats, key="cl_persona_filter")
             with fc2:
                 companies = sorted(clients_df["Company Name"].dropna().unique().tolist()) if "Company Name" in clients_df.columns else []
                 company_filter = st.multiselect("Company Name", companies, key="cl_company_filter")
@@ -771,11 +774,10 @@ def _step3():
 
         # Apply filters
         filtered = clients_df.copy()
-        if persona_filter and persona_filter != "All":
-            # Map persona title to demographic branch
-            target_branch = _PERSONA_DEMO_MAP.get(persona_filter, "")
-            if target_branch and "Demographic Branch" in filtered.columns:
-                filtered = filtered[filtered["Demographic Branch"] == target_branch]
+        if category_filter and category_filter != "All":
+            _filter_col = get_branch_column(seg_type)
+            if _filter_col in filtered.columns:
+                filtered = filtered[filtered[_filter_col] == category_filter]
         if company_filter:
             filtered = filtered[filtered["Company Name"].isin(company_filter)]
         if job_title_filter and "Job Title" in filtered.columns:
@@ -1001,7 +1003,7 @@ def _step3():
     st.divider()
     col_back, _, col_send = st.columns([1, 2, 1])
     with col_back:
-        if st.button("Back to Personas", key="step3_back"):
+        if st.button("Back to Categories", key="step3_back"):
             st.session_state.gen_step = 2
             for k in (
                 "newsletter_full",
