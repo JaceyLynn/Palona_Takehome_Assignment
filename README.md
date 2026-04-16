@@ -48,7 +48,7 @@ The app is organized into five layers, all running locally in a single Streamlit
 
 ### 1. Streamlit UI Layer (`app.py`)
 Three-page app with sidebar navigation:
-- **Generate Content** — 3-step campaign workflow (Campaign Input → Choose Persona → Detail Edit & Send)
+- **Generate Content** — 3-step campaign workflow (Campaign Input → Choose Category → Detail Edit & Send)
 - **Marketing Settings** — CTA templates, layout templates, brand voice, heading/header image, signature/footer
 - **Performance Report** — Campaign overview, drill-down analytics, AI-powered insights
 
@@ -60,6 +60,7 @@ Three-page app with sidebar navigation:
 ### 3. CRM / Contact Layer (`src/hubspot_client.py`, `src/contacts.py`)
 - Loads 100 mock contacts from CSV (`data/hubspot_mock_contacts_100.csv`) with 29 fields each
 - Contacts are segmented by 5 branch types: Demographic, Behavioral, Engagement, Lifecycle Stage, Interest
+- Each branch type has 3 predefined categories (defined in `BASIS_TO_PERSONAS` in `app.py`)
 - **Live mode**: syncs contacts and creates marketing email drafts via HubSpot API (private-app token)
 - **Mock mode**: simulates all CRM operations locally
 
@@ -84,7 +85,7 @@ Three-page app with sidebar navigation:
 │  ┌──────────┐   ┌──────────────┐   ┌────────────────────┐  │
 │  │  Step 1   │──▶│   Step 2     │──▶│      Step 3        │  │
 │  │ Campaign  │   │ Choose       │   │ Edit, Preview,     │  │
-│  │ Input     │   │ Persona      │   │ Select Recipients  │  │
+│  │ Input     │   │ Category     │   │ Select Recipients  │  │
 │  └──────────┘   └──────────────┘   └────────┬───────────┘  │
 │                                              │              │
 │                                     Confirm & Send          │
@@ -239,7 +240,7 @@ python3 -m pytest --ignore=test_smoke.py -v
 1. **Single-user prototype** — No authentication, multi-tenancy, or concurrent access handling. Session state is per-browser-tab.
 2. **Local-first storage** — All data lives in `data/*.json`. No database is used. This is intentional for a take-home demo.
 3. **Simulated sends** — The "send" action simulates delivery. Actual email delivery would be handled by Zapier actions or a dedicated ESP in production.
-4. **Persona-to-branch mapping** — Each persona maps to a demographic branch for contact pre-filtering (e.g., "Agency Founder" → "Decision Makers"). This mapping is hardcoded for the demo dataset.
+4. **Basis-to-category mapping** — Each recommendation basis (Demographic, Behavioral, Engagement, Lifecycle Stage, Interest) maps to exactly 3 categories. These categories map directly to CSV branch column values for contact pre-filtering. This mapping is defined once in `BASIS_TO_PERSONAS`.
 5. **Campaign thesis pre-filled in demo mode** — When no OpenAI key is configured, Step 1 pre-fills a sample thesis for quick testing.
 6. **Performance data is synthetic** — Metrics are generated per campaign with randomized values. No real email tracking is implemented.
 7. **HubSpot private-app token auth** — The integration uses a simple bearer token (no OAuth flow). This is standard for internal/prototype tools.
@@ -260,16 +261,16 @@ The sidebar shows the current mode for each service: **AI**, **CRM**, and **Zapi
 ### Step 1 — Campaign Content
 The user enters a campaign thesis or brief. The app generates a blog outline and draft. The interface also supports optional image and document uploads for richer campaign context in the prototype.
 
-### Step 2 — Choose Persona
-The user selects one of three personas (or clicks "Suggest Different Categories" for 6 alternative personas across 2 sets). The selected persona drives newsletter content and recipient filtering.
+### Step 2 — Choose Category
+The user selects one of three predefined categories for the recommendation basis chosen in Step 1. Each basis (Demographic, Behavioral, Engagement, Lifecycle Stage, Interest) has exactly three categories defined in `BASIS_TO_PERSONAS`. The selected category drives newsletter content generation and recipient filtering.
 
 ### Step 3 — Detail Edit & Send
 - Blog outline and draft (editable, with regenerate option)
 - Three persona-tailored newsletter options (subject + body)
 - Subject line and body editing
 - Header image (from Marketing Settings or Step 1 upload) shown in preview
-- Recipient list pre-filtered by persona's demographic branch
-- Filters: persona, company, job title, priority level
+- Recipient list pre-filtered by the selected basis and category
+- Filters: category, company, job title, priority level
 - Full newsletter preview with heading, subject, hero image, body, and signature
 - Send time setting (manual or per-contact preferred)
 - Confirm & Send triggers the post-approval workflow, which may include simulated send behavior, HubSpot draft creation, campaign logging, performance metric generation, and Zapier webhook handoff depending on configured integrations.
