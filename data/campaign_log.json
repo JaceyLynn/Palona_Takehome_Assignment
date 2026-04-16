@@ -1,1 +1,275 @@
-[]
+[
+  {
+    "campaign_id": "0da1f580",
+    "thesis": "Why creative agencies need workflow automation before scaling client operations",
+    "send_status": "sent",
+    "send_time": "2026-04-16T03:11:08.704279+00:00",
+    "targeted_categories": [
+      "Lifecycle Stage"
+    ],
+    "sent_count": 3,
+    "group_results": [
+      {
+        "category": "Lifecycle Stage",
+        "subject": "Unlock Your Agency's Growth Potential with Workflow Automation",
+        "sent": 3,
+        "deliveries": [
+          {
+            "email": "camila.johnson62@anchorlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:11:08.704266+00:00"
+          },
+          {
+            "email": "aurora.nguyen64@anchorlabs.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:11:08.704275+00:00"
+          },
+          {
+            "email": "mateo.nelson100@beaconlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:11:08.704277+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "0da1f580",
+    "blog_title": "Why creative agencies need workflow automation before scaling client operations",
+    "send_date": "2026-04-16T03:11:08.704279+00:00",
+    "persona": "Lifecycle Stage",
+    "newsletter_id": "",
+    "newsletter_subject": "Unlock Your Agency's Growth Potential with Workflow Automation",
+    "crm_mode": "live",
+    "send_status": "sent",
+    "recipient_count": 3,
+    "hubspot_email_endpoint": "https://api.hubapi.com//marketing/v3/emails"
+  },
+  {
+    "campaign_id": "7de8774a",
+    "thesis": "How AI-powered workflow automation helps creative teams save time without disrupting their process",
+    "send_status": "sent",
+    "send_time": "2026-04-16T03:19:24.218764+00:00",
+    "targeted_categories": [
+      "Engagement"
+    ],
+    "sent_count": 29,
+    "group_results": [
+      {
+        "category": "Engagement",
+        "subject": "Unlock Creative Efficiency with AI-Powered Workflow Automation",
+        "sent": 29,
+        "deliveries": [
+          {
+            "email": "ella.brown3@anchorcollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218682+00:00"
+          },
+          {
+            "email": "scarlett.clark5@framepartners.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218693+00:00"
+          },
+          {
+            "email": "ava.taylor7@blueworks.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218695+00:00"
+          },
+          {
+            "email": "noah.adams8@layerlabs.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218696+00:00"
+          },
+          {
+            "email": "aiden.hall13@signalstudio.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218698+00:00"
+          },
+          {
+            "email": "layla.brown18@anchorcreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218699+00:00"
+          },
+          {
+            "email": "emma.adams24@canvaslabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218701+00:00"
+          },
+          {
+            "email": "theodore.nelson29@layerworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218702+00:00"
+          },
+          {
+            "email": "levi.lee31@orbitworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218704+00:00"
+          },
+          {
+            "email": "mia.walker32@signalagency.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218705+00:00"
+          },
+          {
+            "email": "riley.nelson36@anchorcreative.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218707+00:00"
+          },
+          {
+            "email": "benjamin.martinez42@opencollective.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218708+00:00"
+          },
+          {
+            "email": "penelope.anderson44@flowlabs.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218709+00:00"
+          },
+          {
+            "email": "sofia.turner45@threadcollective.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218711+00:00"
+          },
+          {
+            "email": "mateo.carter47@sparkcreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218712+00:00"
+          },
+          {
+            "email": "alex.scott49@sparkstudio.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218713+00:00"
+          },
+          {
+            "email": "elijah.nguyen51@northcollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218715+00:00"
+          },
+          {
+            "email": "daniel.ross53@openworks.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218716+00:00"
+          },
+          {
+            "email": "julian.baker57@anchorlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218718+00:00"
+          },
+          {
+            "email": "camila.johnson62@anchorlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218719+00:00"
+          },
+          {
+            "email": "liam.walker65@northpartners.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218720+00:00"
+          },
+          {
+            "email": "samuel.martinez72@layermedia.studio",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218721+00:00"
+          },
+          {
+            "email": "henry.mitchell79@bluecreative.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218723+00:00"
+          },
+          {
+            "email": "noah.taylor80@bluelabs.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218724+00:00"
+          },
+          {
+            "email": "camila.chen81@motivegroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218725+00:00"
+          },
+          {
+            "email": "priya.martinez83@beaconhouse.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218727+00:00"
+          },
+          {
+            "email": "sofia.lee84@framecollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218742+00:00"
+          },
+          {
+            "email": "wyatt.allen88@bluegroup.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218758+00:00"
+          },
+          {
+            "email": "mateo.nelson100@beaconlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:19:24.218761+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "7de8774a",
+    "blog_title": "How AI-powered workflow automation helps creative teams save time without disrupting their process",
+    "send_date": "2026-04-16T03:19:24.218764+00:00",
+    "persona": "Engagement",
+    "newsletter_id": "",
+    "newsletter_subject": "Unlock Creative Efficiency with AI-Powered Workflow Automation",
+    "crm_mode": "live",
+    "send_status": "sent",
+    "recipient_count": 29,
+    "hubspot_email_endpoint": "https://api.hubapi.com//marketing/v3/emails"
+  },
+  {
+    "campaign_id": "de81e8dc",
+    "thesis": "How AI-powered workflow automation helps creative teams save time without disrupting their process",
+    "send_status": "sent",
+    "send_time": "2026-04-16T03:24:26.887067+00:00",
+    "targeted_categories": [
+      "Lifecycle Stage"
+    ],
+    "sent_count": 4,
+    "group_results": [
+      {
+        "category": "Lifecycle Stage",
+        "subject": "Unlock Efficiency: Transform Your Creative Team's Workflow with AI",
+        "sent": 4,
+        "deliveries": [
+          {
+            "email": "ella.brown3@anchorcollective.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:24:26.887051+00:00"
+          },
+          {
+            "email": "isabella.clark33@bluecollective.co",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:24:26.887062+00:00"
+          },
+          {
+            "email": "daniel.king60@framecreative.com",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:24:26.887064+00:00"
+          },
+          {
+            "email": "mateo.nelson100@beaconlabs.io",
+            "status": "simulated_sent",
+            "delivered_at": "2026-04-16T03:24:26.887065+00:00"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "campaign_id": "de81e8dc",
+    "blog_title": "How AI-powered workflow automation helps creative teams save time without disrupting their process",
+    "send_date": "2026-04-16T03:24:26.887067+00:00",
+    "persona": "Lifecycle Stage",
+    "newsletter_id": "",
+    "newsletter_subject": "Unlock Efficiency: Transform Your Creative Team's Workflow with AI",
+    "crm_mode": "live",
+    "send_status": "sent",
+    "recipient_count": 4,
+    "hubspot_email_endpoint": "https://api.hubapi.com//marketing/v3/emails"
+  }
+]
