@@ -226,7 +226,7 @@ _init()
 # Main pages and Info Setting sub-pages
 NAV_ITEMS = [
     {"label": "Generate Content", "key": "generate"},
-    {"label": "Info Setting", "key": "settings"},
+    {"label": "Marketing Settings", "key": "settings"},
     {"label": "Performance Report", "key": "report"},
 ]
 
@@ -342,11 +342,21 @@ def _step1():
     st.divider()
 
     # Branch basis selector (drives CSV column lookup)
-    st.selectbox(
-        "Provide personas based on:",
-        BRANCH_BASIS_LABELS,
-        key="seg_type_select",
+    _BASIS_DISPLAY_LABELS = [
+        "Demographic (who the recipients are by role or profile)",
+        "Behavioral (what actions they have taken)",
+        "Engagement (how actively they interact)",
+        "Lifecycle Stage (where they are in the client journey)",
+        "Interest (what topics or outcomes they care about most)",
+    ]
+    _basis_sel = st.selectbox(
+        "Provide recipient recommendations based on:",
+        _BASIS_DISPLAY_LABELS,
+        key="seg_type_display_select",
     )
+    # Map display label back to the raw key used by BRANCH_BASIS_MAP
+    _basis_key = _basis_sel.split(" (")[0]
+    st.session_state["seg_type_select"] = _basis_key
 
     # Next step
     _, _, _col_r1 = st.columns([4, 1, 1])
@@ -390,18 +400,62 @@ def _step1():
 
 # -- Step 2: Option Preview ---------------------------------------------
 
+# Alternative persona sets for "Suggest Different Categories"
+_ALT_PERSONA_SETS = [
+    [
+        {"id": "alt_growth", "title": "Growth Marketer",
+         "pain_points": ["Scaling campaigns across channels", "Proving ROI to leadership", "Keeping up with platform changes"],
+         "messaging_angle": "Focus on measurable growth tactics, attribution, and scalable playbooks."},
+        {"id": "alt_cto", "title": "CTO / Technical Lead",
+         "pain_points": ["Integrating marketing tools with engineering stack", "Data quality and pipeline reliability", "Balancing speed with stability"],
+         "messaging_angle": "Emphasize technical integration, data infrastructure, and developer-friendly solutions."},
+        {"id": "alt_cx", "title": "Customer Experience Lead",
+         "pain_points": ["Unifying touchpoints across the customer journey", "Reducing churn through proactive engagement", "Scaling personalization"],
+         "messaging_angle": "Highlight customer-centric strategies, retention frameworks, and personalization at scale."},
+    ],
+    [
+        {"id": "alt_rev", "title": "Revenue Operations Manager",
+         "pain_points": ["Aligning sales and marketing data", "Forecasting accuracy", "Process standardization across teams"],
+         "messaging_angle": "Focus on cross-functional alignment, data-driven forecasting, and operational efficiency."},
+        {"id": "alt_brand", "title": "Brand Strategist",
+         "pain_points": ["Maintaining brand consistency at scale", "Differentiating in crowded markets", "Balancing brand and performance"],
+         "messaging_angle": "Emphasize brand storytelling, differentiation, and long-term positioning."},
+        {"id": "alt_product", "title": "Product Marketing Manager",
+         "pain_points": ["Translating features into customer value", "Competitive positioning", "Launch execution across teams"],
+         "messaging_angle": "Highlight go-to-market strategy, messaging frameworks, and cross-team launch coordination."},
+    ],
+]
+
+
 def _step2():
     thesis = st.session_state["campaign_thesis"]
 
     st.subheader("Step 2 — Choose Persona")
     st.caption(f"Campaign: *{thesis}*")
 
-    # ── Show 3 persona cards ──
+    # ── Determine which persona set to show ──
+    alt_idx = st.session_state.get("_alt_persona_idx", -1)  # -1 = default PERSONAS
+    if alt_idx < 0:
+        active_personas = PERSONAS
+    else:
+        active_personas = _ALT_PERSONA_SETS[alt_idx % len(_ALT_PERSONA_SETS)]
+
     st.session_state.setdefault("selected_persona", None)
     current_sel = st.session_state.get("selected_persona")
 
+    # ── Suggest Different Categories button ──
+    _, _sug_col = st.columns([3, 1])
+    with _sug_col:
+        if st.button("Suggest Different Categories", key="suggest_alt_personas"):
+            new_idx = st.session_state.get("_alt_persona_idx", -1) + 1
+            st.session_state["_alt_persona_idx"] = new_idx
+            st.session_state["selected_persona"] = None  # reset selection
+            st.session_state.pop("persona_newsletter_cache", None)
+            st.rerun()
+
+    # ── Show persona cards ──
     cols = st.columns(3)
-    for i, (col, persona) in enumerate(zip(cols, PERSONAS)):
+    for i, (col, persona) in enumerate(zip(cols, active_personas)):
         with col:
             is_selected = current_sel == persona["id"]
             border_css = (
@@ -429,11 +483,17 @@ def _step2():
             ):
                 if not is_selected:
                     st.session_state["selected_persona"] = persona["id"]
+                    # Store the full persona dict so Step 3 can find it regardless of set
+                    st.session_state["_active_persona_obj"] = persona
                     st.rerun()
 
     if current_sel:
-        sel_persona = next(p for p in PERSONAS if p["id"] == current_sel)
-        st.info(f"Selected persona: **{sel_persona['title']}**")
+        # Resolve persona from active set or stored object
+        sel_persona = st.session_state.get("_active_persona_obj") or next(
+            (p for p in active_personas if p["id"] == current_sel), None
+        )
+        if sel_persona:
+            st.info(f"Selected persona: **{sel_persona['title']}**")
 
     # ── Navigation ──
     st.divider()
@@ -490,7 +550,14 @@ def _step3():
     thesis = st.session_state["campaign_thesis"]
     seg_type = st.session_state["segmentation_type"]
     persona_id = st.session_state["selected_persona"]
-    persona = next(p for p in PERSONAS if p["id"] == persona_id)
+    persona = st.session_state.get("_active_persona_obj") or next(
+        (p for p in PERSONAS if p["id"] == persona_id), None
+    ) or next(
+        (p for ps in _ALT_PERSONA_SETS for p in ps if p["id"] == persona_id), None
+    )
+    if not persona:
+        st.error("Selected persona not found. Please go back and select again.")
+        return
 
     st.subheader("Step 3 — Detail Edit & Send")
     st.caption(f"Persona: **{persona['title']}**  |  Campaign: *{thesis}*")
@@ -598,265 +665,268 @@ def _step3():
         )
 
     # ================================================================
-    # TWO-COLUMN LAYOUT
+    # FULL-WIDTH STACKED LAYOUT
     # ================================================================
-    left, right = st.columns([1, 1], gap="large")
 
-    # ── LEFT COLUMN: Newsletter edit + preview ─────────────────────
-    with left:
-        st.markdown("#### Newsletter Content")
+    # ── 1. Subject Line ──
+    st.markdown("#### Newsletter Content")
+    st.text_input("Subject Line", key="nl_edit_subject")
 
-        st.text_input("Subject Line", key="nl_edit_subject")
-        st.text_area(
-            "Newsletter Body",
-            height=300,
-            key="nl_edit_body",
-            help="Edit the newsletter text directly. Markdown formatting is supported.",
-        )
+    # ── 2. Newsletter Body ──
+    st.text_area(
+        "Newsletter Body",
+        height=300,
+        key="nl_edit_body",
+        help="Edit the newsletter text directly. Markdown formatting is supported.",
+    )
 
-        # Collect all images: Step 1 uploads + Step 3 upload
-        step1_imgs = st.session_state.get("uploaded_images") or []
-        step3_imgs = st.session_state.get("step3_images") or []
-        all_imgs = list(step1_imgs) + list(step3_imgs)
+    # Collect all images: Step 1 uploads + Step 3 upload
+    step1_imgs = st.session_state.get("uploaded_images") or []
+    step3_imgs = st.session_state.get("step3_images") or []
+    all_imgs = list(step1_imgs) + list(step3_imgs)
 
-        with st.expander("Preview", expanded=True):
-            subj = st.session_state.get("nl_edit_subject", "")
-            body = st.session_state.get("nl_edit_body", "")
-            heading = st.session_state.get("heading", DEFAULT_HEADING)
-            signature = st.session_state.get("signature", DEFAULT_SIGNATURE)
-            sig_html = signature.replace("\n", "<br>")
-            st.markdown(
-                f"<div style='border:1px solid #ddd;border-radius:8px;padding:16px;"
-                f"background:#fafafa;'>"
-                f"<h2 style='margin:0 0 8px;color:{ACCENT};'>{heading}</h2>"
-                f"<p style='color:#888;font-size:0.8em;margin:0 0 4px;'>Subject</p>"
-                f"<h3 style='margin:0 0 12px;color:#111;'>{subj}</h3>"
-                f"<hr style='border-color:#eee;'>"
-                f"<div style='white-space:pre-wrap;font-size:0.95em;color:#222;'>"
-                f"{body}</div>"
-                f"<hr style='border-color:#eee;margin:16px 0 8px;'>"
-                f"<div style='font-size:0.85em;color:#666;'>{sig_html}</div>"
-                f"</div>",
-                unsafe_allow_html=True,
-            )
-            # Show first image inside the preview
-            if all_imgs:
-                st.image(all_imgs[0], use_container_width=True, caption="Newsletter hero image")
+    # Step 3 image upload
+    st.file_uploader(
+        "Add image",
+        type=["png", "jpg", "jpeg", "gif"],
+        accept_multiple_files=True,
+        key="step3_images",
+    )
 
-        # Step 3 image upload
-        st.file_uploader(
-            "Add image",
-            type=["png", "jpg", "jpeg", "gif"],
-            accept_multiple_files=True,
-            key="step3_images",
-        )
+    if all_imgs and len(all_imgs) > 1:
+        st.markdown("**Attached Images**")
+        img_cols = st.columns(min(len(all_imgs), 3))
+        for i, img in enumerate(all_imgs):
+            img_cols[i % 3].image(img, width=130, caption=f"Image {i + 1}")
 
-        if all_imgs and len(all_imgs) > 1:
-            st.markdown("**Attached Images**")
-            img_cols = st.columns(min(len(all_imgs), 3))
-            for i, img in enumerate(all_imgs):
-                img_cols[i % 3].image(img, width=130, caption=f"Image {i + 1}")
+    docs = st.session_state.get("uploaded_docs") or []
+    if docs:
+        st.markdown("**Attached Documents**")
+        for doc in docs:
+            st.caption(doc.name)
 
-        docs = st.session_state.get("uploaded_docs") or []
-        if docs:
-            st.markdown("**Attached Documents**")
-            for doc in docs:
-                st.caption(doc.name)
+    st.divider()
 
-    # ── RIGHT COLUMN: Targeted recipient list ───────────────────────
-    with right:
-        st.markdown("#### Recipients")
+    # ── 3. Recipients (filters + list) ──
+    st.markdown("#### Recipients")
 
-        clients_df: pd.DataFrame = st.session_state["step3_clients"]
-        branch_col = get_branch_column(seg_type)
+    clients_df: pd.DataFrame = st.session_state["step3_clients"]
+    branch_col = get_branch_column(seg_type)
 
-        if not clients_df.empty and "Email" in clients_df.columns:
-            # ── Filters ──
-            with st.expander("Filters", expanded=False):
-                fc1, fc2 = st.columns(2)
-                with fc1:
-                    persona_titles = ["All"] + [p["title"] for p in PERSONAS]
-                    persona_filter = st.selectbox("Persona", persona_titles, key="cl_persona_filter")
-                with fc2:
-                    companies = sorted(clients_df["Company Name"].dropna().unique().tolist()) if "Company Name" in clients_df.columns else []
-                    company_filter = st.multiselect("Company Name", companies, key="cl_company_filter")
-                fc3, fc4 = st.columns(2)
-                with fc3:
-                    job_titles = sorted(clients_df["Job Title"].dropna().unique().tolist()) if "Job Title" in clients_df.columns else []
-                    job_title_filter = st.multiselect("Job Title", job_titles, key="cl_job_title_filter")
-                with fc4:
-                    priorities = sorted(clients_df["Priority Level"].dropna().unique().tolist()) if "Priority Level" in clients_df.columns else []
-                    priority_filter = st.multiselect("Priority Level", priorities, key="cl_priority_filter")
+    if not clients_df.empty and "Email" in clients_df.columns:
+        # ── Filters ──
+        with st.expander("Filters", expanded=False):
+            fc1, fc2 = st.columns(2)
+            with fc1:
+                persona_titles = ["All"] + [p["title"] for p in PERSONAS]
+                persona_filter = st.selectbox("Persona", persona_titles, key="cl_persona_filter")
+            with fc2:
+                companies = sorted(clients_df["Company Name"].dropna().unique().tolist()) if "Company Name" in clients_df.columns else []
+                company_filter = st.multiselect("Company Name", companies, key="cl_company_filter")
+            fc3, fc4 = st.columns(2)
+            with fc3:
+                job_titles = sorted(clients_df["Job Title"].dropna().unique().tolist()) if "Job Title" in clients_df.columns else []
+                job_title_filter = st.multiselect("Job Title", job_titles, key="cl_job_title_filter")
+            with fc4:
+                priorities = sorted(clients_df["Priority Level"].dropna().unique().tolist()) if "Priority Level" in clients_df.columns else []
+                priority_filter = st.multiselect("Priority Level", priorities, key="cl_priority_filter")
 
-            # Apply filters
-            filtered = clients_df.copy()
-            if persona_filter and persona_filter != "All":
-                # Map persona title to demographic branch
-                _persona_branch_map = {
-                    "Agency Founder": "Decision Makers",
-                    "Operations / Project Manager": "Operational Users",
-                    "Creative Lead": "Creative Practitioners",
-                }
-                target_branch = _persona_branch_map.get(persona_filter, "")
-                if target_branch and "Demographic Branch" in filtered.columns:
-                    filtered = filtered[filtered["Demographic Branch"] == target_branch]
-            if company_filter:
-                filtered = filtered[filtered["Company Name"].isin(company_filter)]
-            if job_title_filter and "Job Title" in filtered.columns:
-                filtered = filtered[filtered["Job Title"].isin(job_title_filter)]
-            if priority_filter and "Priority Level" in filtered.columns:
-                filtered = filtered[filtered["Priority Level"].isin(priority_filter)]
+        # Apply filters
+        filtered = clients_df.copy()
+        if persona_filter and persona_filter != "All":
+            # Map persona title to demographic branch
+            _persona_branch_map = {
+                "Agency Founder": "Decision Makers",
+                "Operations / Project Manager": "Operational Users",
+                "Creative Lead": "Creative Practitioners",
+            }
+            target_branch = _persona_branch_map.get(persona_filter, "")
+            if target_branch and "Demographic Branch" in filtered.columns:
+                filtered = filtered[filtered["Demographic Branch"] == target_branch]
+        if company_filter:
+            filtered = filtered[filtered["Company Name"].isin(company_filter)]
+        if job_title_filter and "Job Title" in filtered.columns:
+            filtered = filtered[filtered["Job Title"].isin(job_title_filter)]
+        if priority_filter and "Priority Level" in filtered.columns:
+            filtered = filtered[filtered["Priority Level"].isin(priority_filter)]
 
-            # Build display columns
-            show_cols = []
-            for c in DISPLAY_COLUMNS:
-                if c in filtered.columns:
-                    show_cols.append(c)
-            if branch_col in filtered.columns and branch_col not in show_cols:
-                show_cols.insert(5, branch_col)
+        # Build display columns
+        show_cols = []
+        for c in DISPLAY_COLUMNS:
+            if c in filtered.columns:
+                show_cols.append(c)
+        if branch_col in filtered.columns and branch_col not in show_cols:
+            show_cols.insert(5, branch_col)
 
-            display = filtered[show_cols].copy()
-            display.insert(0, "Send", filtered["Email"].isin(st.session_state["selected_emails"]))
+        display = filtered[show_cols].copy()
+        display.insert(0, "Send", filtered["Email"].isin(st.session_state["selected_emails"]))
 
-            # Select All toggle
-            all_selected = bool(display["Send"].all()) if len(display) > 0 else False
-            if st.checkbox("Select All", value=all_selected, key="select_all_contacts"):
-                if not all_selected:
-                    st.session_state["selected_emails"] = set(clients_df["Email"].tolist())
-                    st.session_state.pop("client_editor", None)
-                    st.rerun()
-            else:
-                if all_selected and len(display) > 0:
-                    st.session_state["selected_emails"] = set()
-                    st.session_state.pop("client_editor", None)
-                    st.rerun()
-
-            edited_df = st.data_editor(
-                display,
-                column_config={
-                    "Send": st.column_config.CheckboxColumn("Send", default=True),
-                },
-                hide_index=True,
-                use_container_width=True,
-                key="client_editor",
-            )
-
-            # Sync selections back to session state
-            if "Send" in edited_df.columns and "Email" in edited_df.columns:
-                st.session_state["selected_emails"] = set(
-                    edited_df.loc[edited_df["Send"], "Email"].tolist()
-                )
-
-            sel_count = int(edited_df["Send"].sum()) if "Send" in edited_df.columns else 0
-            total = len(edited_df)
-            st.caption(f"**{sel_count}** of **{total}** contacts selected for send")
+        # Select All toggle
+        all_selected = bool(display["Send"].all()) if len(display) > 0 else False
+        if st.checkbox("Select All", value=all_selected, key="select_all_contacts"):
+            if not all_selected:
+                st.session_state["selected_emails"] = set(clients_df["Email"].tolist())
+                st.session_state.pop("client_editor", None)
+                st.rerun()
         else:
-            edited_df = pd.DataFrame()
-            st.info("No contacts found for this branch.")
+            if all_selected and len(display) > 0:
+                st.session_state["selected_emails"] = set()
+                st.session_state.pop("client_editor", None)
+                st.rerun()
 
-        # ── Add contacts section ──
-        with st.expander("Add More Contacts"):
-            add_tab, csv_tab, hs_tab = st.tabs(["Manual", "CSV Upload", "HubSpot"])
+        edited_df = st.data_editor(
+            display,
+            column_config={
+                "Send": st.column_config.CheckboxColumn("Send", default=True),
+            },
+            hide_index=True,
+            use_container_width=True,
+            key="client_editor",
+        )
 
-            with add_tab:
-                ac1, ac2 = st.columns(2)
-                with ac1:
-                    mfn = st.text_input("First Name", key="m_fname", placeholder="Jane")
-                    mln = st.text_input("Last Name", key="m_lname", placeholder="Doe")
-                    me = st.text_input("Email", key="m_email", placeholder="jane@example.com")
-                with ac2:
-                    mc = st.text_input("Company", key="m_comp", placeholder="Acme Corp")
-                    mj = st.text_input("Job Title", key="m_job", placeholder="Director")
-                    st.write("")
-                    sync_hs_manual = st.checkbox("Sync to HubSpot too", key="m_sync_hs")
-                    if st.button("Add Contact", key="m_add"):
-                        if mfn and me:
-                            new_row = {
-                                "Email": me,
-                                "First Name": mfn,
-                                "Last Name": mln,
-                                "Company Name": mc,
-                                "Job Title": mj,
-                                "Priority Level": "",
-                                "Primary Need": "",
-                                "Preferred Send Time": "09:00",
-                            }
-                            # Fill branch column
-                            branch_col = get_branch_column(seg_type)
-                            new_row[branch_col] = ""
-                            new_df = pd.DataFrame([new_row])
-                            st.session_state["step3_clients"] = merge_uploaded_contacts(
-                                st.session_state["step3_clients"], new_df
-                            )
-                            st.session_state["selected_emails"].add(me)
-                            st.session_state.pop("client_editor", None)
-                            if sync_hs_manual:
-                                _sync_contacts_to_hubspot([new_row])
-                            st.rerun()
-                        else:
-                            st.warning("First name and email are required.")
+        # Sync selections back to session state
+        if "Send" in edited_df.columns and "Email" in edited_df.columns:
+            st.session_state["selected_emails"] = set(
+                edited_df.loc[edited_df["Send"], "Email"].tolist()
+            )
 
-            with csv_tab:
-                ucsv = st.file_uploader("Upload CSV", type=["csv"], key="csv_up3")
-                sync_hs_csv = st.checkbox("Sync to HubSpot too", key="csv_sync_hs")
-                if ucsv and st.button("Import CSV", key="csv_imp"):
-                    uploaded = pd.read_csv(ucsv)
-                    # Map common alternate column names
-                    col_map = {
-                        "email": "Email",
-                        "first_name": "First Name",
-                        "last_name": "Last Name",
-                        "company_name": "Company Name",
-                        "company": "Company Name",
-                        "name": "First Name",
-                        "job_title": "Job Title",
-                    }
-                    uploaded.rename(columns={k: v for k, v in col_map.items() if k in uploaded.columns}, inplace=True)
-                    if "Email" in uploaded.columns:
-                        before = len(st.session_state["step3_clients"])
+        sel_count = int(edited_df["Send"].sum()) if "Send" in edited_df.columns else 0
+        total = len(edited_df)
+        st.caption(f"**{sel_count}** of **{total}** contacts selected for send")
+    else:
+        edited_df = pd.DataFrame()
+        st.info("No contacts found for this branch.")
+
+    # ── Add contacts section ──
+    with st.expander("Add More Contacts"):
+        add_tab, csv_tab, hs_tab = st.tabs(["Manual", "CSV Upload", "HubSpot"])
+
+        with add_tab:
+            ac1, ac2 = st.columns(2)
+            with ac1:
+                mfn = st.text_input("First Name", key="m_fname", placeholder="Jane")
+                mln = st.text_input("Last Name", key="m_lname", placeholder="Doe")
+                me = st.text_input("Email", key="m_email", placeholder="jane@example.com")
+            with ac2:
+                mc = st.text_input("Company", key="m_comp", placeholder="Acme Corp")
+                mj = st.text_input("Job Title", key="m_job", placeholder="Director")
+                st.write("")
+                sync_hs_manual = st.checkbox("Sync to HubSpot too", key="m_sync_hs")
+                if st.button("Add Contact", key="m_add"):
+                    if mfn and me:
+                        new_row = {
+                            "Email": me,
+                            "First Name": mfn,
+                            "Last Name": mln,
+                            "Company Name": mc,
+                            "Job Title": mj,
+                            "Priority Level": "",
+                            "Primary Need": "",
+                            "Preferred Send Time": "09:00",
+                        }
+                        # Fill branch column
+                        branch_col = get_branch_column(seg_type)
+                        new_row[branch_col] = ""
+                        new_df = pd.DataFrame([new_row])
                         st.session_state["step3_clients"] = merge_uploaded_contacts(
-                            st.session_state["step3_clients"], uploaded
+                            st.session_state["step3_clients"], new_df
                         )
-                        added = len(st.session_state["step3_clients"]) - before
-                        # Auto-select newly added contacts
-                        st.session_state["selected_emails"].update(uploaded["Email"].tolist())
+                        st.session_state["selected_emails"].add(me)
                         st.session_state.pop("client_editor", None)
-                        if sync_hs_csv:
-                            rows = uploaded.to_dict(orient="records")
-                            _sync_contacts_to_hubspot(rows)
-                        st.success(f"Imported {added} new contacts.")
+                        if sync_hs_manual:
+                            _sync_contacts_to_hubspot([new_row])
                         st.rerun()
                     else:
-                        st.error("CSV must contain an 'Email' column.")
+                        st.warning("First name and email are required.")
 
-            with hs_tab:
-                if st.button("Fetch from HubSpot", key="hs_fetch"):
-                    with st.spinner("Fetching..."):
-                        res = fetch_hubspot_contacts()
-                    if res.get("contacts"):
-                        existing_emails = set(st.session_state["step3_clients"]["Email"].tolist())
-                        rows = []
-                        for hc in res["contacts"]:
-                            email = hc.get("email", "")
-                            if email and email not in existing_emails:
-                                rows.append({
-                                    "Email": email,
-                                    "First Name": hc.get("contact_name", "").split()[0] if hc.get("contact_name") else "",
-                                    "Last Name": " ".join(hc.get("contact_name", "").split()[1:]) if hc.get("contact_name") else "",
-                                    "Company Name": hc.get("company_name", ""),
-                                    "Job Title": "",
-                                })
-                        if rows:
-                            hs_df = pd.DataFrame(rows)
-                            st.session_state["step3_clients"] = merge_uploaded_contacts(
-                                st.session_state["step3_clients"], hs_df
-                            )
-                            st.session_state["selected_emails"].update(r["Email"] for r in rows)
-                            st.session_state.pop("client_editor", None)
-                            st.success(f"Added {len(rows)} HubSpot contacts.")
-                            st.rerun()
-                        else:
-                            st.info("No new contacts to add.")
+        with csv_tab:
+            ucsv = st.file_uploader("Upload CSV", type=["csv"], key="csv_up3")
+            sync_hs_csv = st.checkbox("Sync to HubSpot too", key="csv_sync_hs")
+            if ucsv and st.button("Import CSV", key="csv_imp"):
+                uploaded = pd.read_csv(ucsv)
+                # Map common alternate column names
+                col_map = {
+                    "email": "Email",
+                    "first_name": "First Name",
+                    "last_name": "Last Name",
+                    "company_name": "Company Name",
+                    "company": "Company Name",
+                    "name": "First Name",
+                    "job_title": "Job Title",
+                }
+                uploaded.rename(columns={k: v for k, v in col_map.items() if k in uploaded.columns}, inplace=True)
+                if "Email" in uploaded.columns:
+                    before = len(st.session_state["step3_clients"])
+                    st.session_state["step3_clients"] = merge_uploaded_contacts(
+                        st.session_state["step3_clients"], uploaded
+                    )
+                    added = len(st.session_state["step3_clients"]) - before
+                    # Auto-select newly added contacts
+                    st.session_state["selected_emails"].update(uploaded["Email"].tolist())
+                    st.session_state.pop("client_editor", None)
+                    if sync_hs_csv:
+                        rows = uploaded.to_dict(orient="records")
+                        _sync_contacts_to_hubspot(rows)
+                    st.success(f"Imported {added} new contacts.")
+                    st.rerun()
+                else:
+                    st.error("CSV must contain an 'Email' column.")
+
+        with hs_tab:
+            if st.button("Fetch from HubSpot", key="hs_fetch"):
+                with st.spinner("Fetching..."):
+                    res = fetch_hubspot_contacts()
+                if res.get("contacts"):
+                    existing_emails = set(st.session_state["step3_clients"]["Email"].tolist())
+                    rows = []
+                    for hc in res["contacts"]:
+                        email = hc.get("email", "")
+                        if email and email not in existing_emails:
+                            rows.append({
+                                "Email": email,
+                                "First Name": hc.get("contact_name", "").split()[0] if hc.get("contact_name") else "",
+                                "Last Name": " ".join(hc.get("contact_name", "").split()[1:]) if hc.get("contact_name") else "",
+                                "Company Name": hc.get("company_name", ""),
+                                "Job Title": "",
+                            })
+                    if rows:
+                        hs_df = pd.DataFrame(rows)
+                        st.session_state["step3_clients"] = merge_uploaded_contacts(
+                            st.session_state["step3_clients"], hs_df
+                        )
+                        st.session_state["selected_emails"].update(r["Email"] for r in rows)
+                        st.session_state.pop("client_editor", None)
+                        st.success(f"Added {len(rows)} HubSpot contacts.")
+                        st.rerun()
+                    else:
+                        st.info("No new contacts to add.")
+
+    st.divider()
+
+    # ── 4. Preview ──
+    st.markdown("#### Preview")
+    subj = st.session_state.get("nl_edit_subject", "")
+    body = st.session_state.get("nl_edit_body", "")
+    heading = st.session_state.get("heading", DEFAULT_HEADING)
+    signature = st.session_state.get("signature", DEFAULT_SIGNATURE)
+    sig_html = signature.replace("\n", "<br>")
+    st.markdown(
+        f"<div style='border:1px solid #ddd;border-radius:8px;padding:16px;"
+        f"background:#fafafa;max-width:680px;'>"
+        f"<h2 style='margin:0 0 8px;color:{ACCENT};'>{heading}</h2>"
+        f"<p style='color:#888;font-size:0.8em;margin:0 0 4px;'>Subject</p>"
+        f"<h3 style='margin:0 0 12px;color:#111;'>{subj}</h3>"
+        f"<hr style='border-color:#eee;'>"
+        f"<div style='white-space:pre-wrap;font-size:0.95em;color:#222;'>"
+        f"{body}</div>"
+        f"<hr style='border-color:#eee;margin:16px 0 8px;'>"
+        f"<div style='font-size:0.85em;color:#666;'>{sig_html}</div>"
+        f"</div>",
+        unsafe_allow_html=True,
+    )
+    # Show first image inside the preview
+    if all_imgs:
+        st.image(all_imgs[0], use_container_width=True, caption="Newsletter hero image")
 
     # ================================================================
     # SEND TIME SETTING
@@ -1069,11 +1139,11 @@ def _execute_send(thesis: str, seg_type: str, edited_df: pd.DataFrame):
 
 
 # =====================================================================
-# PAGE 2 — Info Setting
+# PAGE 2 — Marketing Settings
 # =====================================================================
 
 def render_info_setting():
-    st.title("Info Setting")
+    st.title("Marketing Settings")
     st.caption(
         "Configure templates and brand settings used by the content generation flow."
     )
